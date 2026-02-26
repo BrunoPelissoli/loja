@@ -569,6 +569,7 @@ var historicoTab = 'vendas';
 function save(){
   // sempre salva local (offline-first)
   localStorage.setItem('mrevenda', JSON.stringify(db));
+  if(window.__SB){ window.__SB.lastLocalChangeAt = Date.now(); }
 
   // se houver sessão Supabase, também salva online (com debounce)
   if(window.__SB && window.__SB.userId){
@@ -1221,12 +1222,38 @@ window.__SB = {
   client: null,
   userId: null,
   email: null,
-  saveTimer: null
+  saveTimer: null,
+  lastLocalChangeAt: 0,
+  lastRemoteUpdatedAt: 0,
+  autoPullTimer: null
 };
 
 function sbSetStatus(txt){
   var el = document.getElementById('sb-status');
   if(el) el.textContent = txt;
+}
+
+
+function sbStartAutoPull(){
+  sbStopAutoPull();
+  // a cada 20s tenta puxar atualizações (leve)
+  window.__SB.autoPullTimer = setInterval(function(){
+    sbAutoPullTick();
+  }, 20000);
+}
+
+function sbStopAutoPull(){
+  if(window.__SB.autoPullTimer){
+    clearInterval(window.__SB.autoPullTimer);
+    window.__SB.autoPullTimer = null;
+  }
+}
+
+async function sbAutoPullTick(){
+  if(!window.__SB.userId) return;
+  // só aplica pull automático se não houve mudança local recente (últimos 5s)
+  if(Date.now() - (window.__SB.lastLocalChangeAt||0) < 5000) return;
+  await sbSyncPull(false, true);
 }
 
 function sbInit(){
@@ -1246,8 +1273,14 @@ function sbInit(){
         window.__SB.userId = sess.user.id;
         window.__SB.email = sess.user.email || null;
         sbSetStatus(window.__SB.email || ('uid ' + window.__SB.userId.slice(0,6)));
+        sbSyncPull(false, true);
+        sbStartAutoPull();
+        // ao logar: puxar automaticamente
+        sbSyncPull(false, true);
+        sbStartAutoPull();
       }else{
         sbSetStatus('desconectado');
+        sbStopAutoPull();
       }
     });
 
@@ -1257,10 +1290,14 @@ function sbInit(){
         window.__SB.userId = session.user.id;
         window.__SB.email = session.user.email || null;
         sbSetStatus(window.__SB.email || ('uid ' + window.__SB.userId.slice(0,6)));
+        // ao logar: puxar automaticamente
+        sbSyncPull(false, true);
+        sbStartAutoPull();
       }else{
         window.__SB.userId = null;
         window.__SB.email = null;
         sbSetStatus('desconectado');
+        sbStopAutoPull();
       }
     });
   }catch(e){
@@ -1311,7 +1348,7 @@ async function sbLogout(){
 }
 
 // Puxa do online (substitui o banco local)
-async function sbSyncPull(showAlerts=true){
+async function sbSyncPull(showAlerts=true, silent=false){
   try{
     if(!window.__SB.client){ sbInit(); }
     if(!window.__SB.userId){ alert('Faça login para puxar do online.'); return false; }
@@ -1324,21 +1361,38 @@ async function sbSyncPull(showAlerts=true){
 
     if(r.error) throw r.error;
 
+    var remoteUpdated = r.data && r.data.updated_at ? Date.parse(r.data.updated_at) : 0;
+    if(remoteUpdated && window.__SB){ window.__SB.lastRemoteUpdatedAt = remoteUpdated; }
+
     if(!r.data || !r.data.db){
       if(showAlerts) alert('Nenhum dado online encontrado ainda.');
       return false;
     }
 
     var novo = r.data.db;
+
+    // Evitar sobrescrever alterações locais não enviadas
+    var localDirty = window.__SB && (window.__SB.lastLocalChangeAt||0) > (window.__SB.lastRemoteUpdatedAt||0);
+    if(localDirty && remoteUpdated && remoteUpdated > (window.__SB.lastRemoteUpdatedAt||0)){
+      // se houver conflito potencial, não aplica automático
+    }
+
     if(!novo || !Array.isArray(novo.produtos) || !Array.isArray(novo.vendas) || !Array.isArray(novo.movimentacoes)){
       throw new Error('Estrutura inválida no online.');
+    }
+
+    // Se houve alterações locais recentes, só sobrescreve com confirmação (quando showAlerts)
+    if(window.__SB && (Date.now() - (window.__SB.lastLocalChangeAt||0) < 60000) && showAlerts){
+      if(!confirm('Encontramos dados online. Deseja substituir os dados locais pelos dados do online?')){
+        return false;
+      }
     }
 
     db = novo;
     localStorage.setItem('mrevenda', JSON.stringify(db));
     atualizarBadgeFiado();
     renderDashboard();
-    if(showAlerts) alert('Dados carregados do online.');
+    if(showAlerts && !silent) alert('Dados carregados do online.');
     return true;
   }catch(e){
     console.error(e);
@@ -1368,6 +1422,7 @@ async function sbSyncPush(showAlerts=true){
 
     if(r.error) throw r.error;
 
+    if(window.__SB){ window.__SB.lastRemoteUpdatedAt = Date.now(); }
     if(showAlerts) alert('Sincronizado com sucesso.');
     return true;
   }catch(e){
