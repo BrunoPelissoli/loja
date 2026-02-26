@@ -3,12 +3,23 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Minha Revenda</title>
+<title>Bruno Vendas</title>
 <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
 <style>
-:root{--bg:#0f0f0f;--surface:#1a1a1a;--surface2:#252525;--border:#2e2e2e;--accent:#c8f135;--accent2:#f1c735;--text:#f0ede6;--muted:#888;--danger:#ff5c5c;--success:#4ade80}
+:root{
+  --bg:#000000;
+  --card:#0b0b0c;
+  --muted:#a1a1aa;
+  --text:#f5f5f5;
+  --accent:#3b82f6;
+  --accent-2:#2563eb;
+  --danger:#ef4444;
+  --warn:#f59e0b;
+  --ok:#22c55e;
+  --border:#18181b;
+}
 *{box-sizing:border-box;margin:0;padding:0}
-body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min-height:100vh}
+body{font-size:16px;font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min-height:100vh}
 .sidebar{position:fixed;left:0;top:0;bottom:0;width:220px;background:var(--surface);border-right:1px solid var(--border);padding:24px 0;z-index:100;display:flex;flex-direction:column}
 .logo{padding:0 24px 24px;font-family:'DM Serif Display',serif;font-size:22px;color:var(--accent);border-bottom:1px solid var(--border)}
 .logo span{color:var(--text)}
@@ -140,12 +151,40 @@ input:focus,select:focus,textarea:focus{outline:none;border-color:var(--accent)}
   max-height:170px;
 }
 
+
+/* ─── AUMENTO GLOBAL DE FONTE ─────────────────────────────────────────── */
+html{ font-size:17px; }
+
+body{
+  font-size:1rem;
+}
+
+.card,
+.table,
+table,
+th,
+td,
+input,
+select,
+button,
+label{
+  font-size:0.98rem;
+}
+
+.page-title{
+  font-size:1.25rem !important;
+}
+
+.stat-value{
+  font-size:1.35rem !important;
+}
+
 </style>
 </head>
 <body>
 
 <div class="sidebar">
-  <div class="logo">Minha<span>Revenda</span></div>
+  <div class="logo"><span style="font-size:24px;font-weight:900;letter-spacing:0.8px">Bruno <span style="color:var(--accent)">Vendas</span></span></div>
   <nav class="nav">
     <div class="nav-item active" id="nav-dashboard" onclick="goTo('dashboard')">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg>Dashboard
@@ -340,7 +379,7 @@ input:focus,select:focus,textarea:focus{outline:none;border-color:var(--accent)}
       <div class="page-title">Importar / Exportar <small>Backup e manutenção do banco local</small></div>
     
     <div class="card" style="margin-bottom:16px">
-      <div style="font-size:14px;font-weight:900;margin-bottom:8px">Conta (Supabase)</div>
+      <div style="font-size:17px;font-weight:900;margin-bottom:8px">Conta (Supabase)</div>
       <div style="color:var(--muted);font-size:13px;line-height:1.45;margin-bottom:12px">
         Faça login para sincronizar automaticamente entre dispositivos.
       </div>
@@ -373,7 +412,7 @@ input:focus,select:focus,textarea:focus{outline:none;border-color:var(--accent)}
 
     <div class="dados-grid">
       <div class="card">
-        <div style="font-size:14px;font-weight:800;margin-bottom:8px">Exportar dados</div>
+        <div style="font-size:17px;font-weight:800;margin-bottom:8px">Exportar dados</div>
         <div style="color:var(--muted);font-size:13px;line-height:1.45;margin-bottom:14px">
           Gera um arquivo <strong>.json</strong> com Produtos, Vendas e Movimentações (localStorage).
         </div>
@@ -383,7 +422,7 @@ input:focus,select:focus,textarea:focus{outline:none;border-color:var(--accent)}
       </div>
 
       <div class="card">
-        <div style="font-size:14px;font-weight:800;margin-bottom:8px">Importar dados</div>
+        <div style="font-size:17px;font-weight:800;margin-bottom:8px">Importar dados</div>
         <div style="color:var(--muted);font-size:13px;line-height:1.45;margin-bottom:14px">
           Selecione um arquivo <strong>.json</strong> exportado aqui. Isso vai <strong>substituir</strong> o banco atual.
         </div>
@@ -396,7 +435,7 @@ input:focus,select:focus,textarea:focus{outline:none;border-color:var(--accent)}
     </div>
 
     <div class="card" style="margin-top:16px;border-color:rgba(255,92,92,.35)">
-      <div style="font-size:14px;font-weight:900;margin-bottom:8px;color:var(--danger)">Zona de risco</div>
+      <div style="font-size:17px;font-weight:900;margin-bottom:8px;color:var(--danger)">Zona de risco</div>
       <div style="color:var(--muted);font-size:13px;line-height:1.45;margin-bottom:14px">
         Remove <strong>todo</strong> o banco local (produtos, vendas, fiado e movimentações). Esta ação não tem desfazer.
       </div>
@@ -1039,7 +1078,25 @@ function renderDashboard(){
   function inRange(data){if(!range)return true;var d=new Date(data);return d>=range.start&&d<=range.end;}
   var vendas=db.vendas.filter(function(v){return inRange(v.data);});
   var movEnt=db.movimentacoes.filter(function(m){return m.tipo==='entrada'&&inRange(m.data);});
-  var totalInv=movEnt.reduce(function(s,m){var p=db.produtos[m.produtoIdx]; if(!p||p.excluido) return s; return s + (Number(m.custoUnit||0)*Number(m.qtd||0));},0);
+  // Total investido = (gastos com compras no período) + (custo do estoque atual)
+  // Ao excluir um produto (p.excluido=true), ele sai automaticamente destes cálculos.
+  var totalCompras=movEnt.reduce(function(s,m){var p=db.produtos[m.produtoIdx]; if(!p||p.excluido) return s; return s + (Number(m.custoUnit||0)*Number(m.qtd||0));},0);
+
+  // custo do estoque atual: usa o último custo unitário de entrada conhecido por produto
+  var lastCostByIdx={};
+  db.movimentacoes.forEach(function(mm){
+    if(mm.tipo!=='entrada') return;
+    var p2=db.produtos[mm.produtoIdx];
+    if(!p2||p2.excluido) return;
+    var t=Date.parse(mm.data||'')||0;
+    var prev=lastCostByIdx[mm.produtoIdx];
+    if(!prev||t>=prev.t){ lastCostByIdx[mm.produtoIdx]={t:t,c:Number(mm.custoUnit||0)}; }
+  });
+  var custoEstoqueAtual=db.produtos.map(function(p,idx){return {p:p,idx:idx};}).filter(function(x){return x.p && !x.p.excluido;}).reduce(function(s,x){
+    var c=lastCostByIdx[x.idx]?Number(lastCostByIdx[x.idx].c||0):0;
+    return s + (c*Number(x.p.estoque||0));
+  },0);
+  var totalInv=totalCompras + custoEstoqueAtual;
   document.getElementById('dash-receita').textContent=fmt(vendas.filter(function(v){return v.pgto==='pago' || (v.pgto==='fiado' && v.fiadoPago);}).reduce(function(s,v){return s+v.total;},0));
   document.getElementById('dash-lucro').textContent=fmt(vendas.reduce(function(s,v){return s+v.itens.reduce(function(ss,i){return ss+(i.preco-i.custo)*i.qtd;},0);},0));
   document.getElementById('dash-investido').textContent=fmt(totalInv);
@@ -1064,7 +1121,11 @@ function renderDashboard(){
 // ─── RELATÓRIOS ───────────────────────────────────────────────────────────────
 var chartProdInst=null;
 function renderRelatorios(){
-  document.getElementById('rel-estoque-custo').textContent=fmt(db.produtos.reduce(function(s,p){return s+p.custo*p.estoque;},0));
+    // Estoque em Custo: considera apenas produtos ativos (não excluídos) com estoque > 0
+  var estoqueCusto = db.produtos
+    .filter(function(p){ return p && !p.excluido && Number(p.estoque||0) > 0; })
+    .reduce(function(s,p){ return s + (Number(p.custo||0) * Number(p.estoque||0)); }, 0);
+  document.getElementById('rel-estoque-custo').textContent = fmt(estoqueCusto);
   var valorEstoque = db.produtos
     .filter(function(p){return p && !p.excluido;})
     .reduce(function(s,p){return s + (Number(p.preco||0) * Number(p.estoque||0));},0);
