@@ -567,6 +567,9 @@ var historicoTab = 'vendas';
 })();
 
 function save(){
+  // marca atualização (para resolução de conflitos)
+  db._updatedAt = new Date().toISOString();
+
   // sempre salva local (offline-first)
   localStorage.setItem('mrevenda', JSON.stringify(db));
   if(window.__SB){ window.__SB.lastLocalChangeAt = Date.now(); }
@@ -1355,7 +1358,7 @@ async function sbSyncPull(showAlerts=true, silent=false){
 
     var r = await window.__SB.client
       .from('revenda_db')
-      .select('db')
+      .select('db,updated_at')
       .eq('user_id', window.__SB.userId)
       .maybeSingle();
 
@@ -1387,6 +1390,20 @@ async function sbSyncPull(showAlerts=true, silent=false){
         return false;
       }
     }
+    // Conflito: se o local é mais recente que o online, não sobrescreve automaticamente
+    var localTs = 0;
+    try{ localTs = db && db._updatedAt ? Date.parse(db._updatedAt) : 0; }catch(e){}
+    if(localTs && remoteUpdated && localTs > remoteUpdated){
+      if(showAlerts){
+        if(!confirm('Seu banco local parece mais recente que o online. Deseja substituir o local pelo online mesmo assim?')){
+          return false;
+        }
+      }else{
+        // modo automático: preserva o local
+        return false;
+      }
+    }
+
 
     db = novo;
     localStorage.setItem('mrevenda', JSON.stringify(db));
@@ -1413,7 +1430,7 @@ async function sbSyncPush(showAlerts=true){
     var payload = {
       user_id: window.__SB.userId,
       db: db,
-      updated_at: new Date().toISOString()
+      updated_at: (db && db._updatedAt) ? db._updatedAt : new Date().toISOString()
     };
 
     var r = await window.__SB.client
