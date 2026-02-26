@@ -352,7 +352,10 @@ input:focus,select:focus,textarea:focus{outline:none;border-color:var(--accent)}
           Gera um arquivo <strong>.json</strong> com Produtos, Vendas e Movimentações (localStorage).
         </div>
         <div class="dados-actions">
+          <div class="dados-actions">
           <button class="btn btn-primary" onclick="exportarDados()">⬇️ Exportar JSON</button>
+          <button class="btn btn-secondary" onclick="sincronizarAgora()">🔄 Sincronizar agora</button>
+        </div>
         </div>
       </div>
 
@@ -1262,16 +1265,28 @@ async function salvarOnline(){
 }
 
 window.loginGoogle = async function(){
-  if(!window.__FB) { alert('Firebase ainda não carregou. Recarregue a página.'); return; }
-  var FB = window.__FB;
-  var prov = new FB.GoogleAuthProvider();
-  await FB.signInWithPopup(FB.auth, prov);
+  if(!window.__FB){ alert('Firebase ainda não carregou. Recarregue a página.'); return; }
+  try{
+    var FB = window.__FB;
+    var prov = new FB.GoogleAuthProvider();
+    var cred = await FB.signInWithPopup(FB.auth, prov);
+    var email = (cred && cred.user && cred.user.email) ? cred.user.email : 'ok';
+    alert('Login realizado: ' + email);
+  }catch(e){
+    console.error('Login falhou', e);
+    alert('Login falhou: ' + (e && e.message ? e.message : e));
+  }
 };
 
 window.logout = async function(){
   if(!window.__FB) return;
-  var FB = window.__FB;
-  await FB.signOut(FB.auth);
+  try{
+    var FB = window.__FB;
+    await FB.signOut(FB.auth);
+    alert('Você saiu da conta.');
+  }catch(e){
+    console.error('Logout falhou', e);
+  }
 };
 
 function initFirebaseAuthSync(){
@@ -1281,12 +1296,29 @@ function initFirebaseAuthSync(){
   FB.onAuthStateChanged(FB.auth, async function(user){
     if(!user){
       currentUid = null;
+      setAuthStatus('desconectado');
 
       // fallback local (para não ficar tudo zerado)
       try{
         var local = JSON.parse(localStorage.getItem('mrevenda') || 'null');
         if(local) db = local;
       }catch(e){}
+
+function setAuthStatus(txt){
+  var el = document.getElementById('auth-status-text');
+  if(el) el.textContent = txt;
+}
+
+async function sincronizarAgora(){
+  if(!currentUid){
+    alert('Você precisa estar logado para sincronizar.');
+    return;
+  }
+  var ok = await salvarOnline();
+  if(ok) alert('Sincronizado com sucesso.');
+  else alert('Não foi possível sincronizar. Verifique internet e permissões.');
+}
+
 
       atualizarBadgeFiado();
       // re-render apenas a tela atual (default: dashboard)
