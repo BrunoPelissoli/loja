@@ -423,6 +423,43 @@ label{
     gap:24px !important;
   }
 }
+
+
+/* ─── SYNC UI ───────────────────────────────────────────── */
+.sync-indicator{
+  position:fixed;
+  right:16px;
+  bottom:16px;
+  z-index:9999;
+  padding:12px 14px;
+  border-radius:16px;
+  background: rgba(20,20,25,.92);
+  border: 1px solid rgba(255,255,255,.10);
+  box-shadow: 0 20px 40px rgba(0,0,0,.45);
+  min-width:220px;
+  max-width:320px;
+  backdrop-filter: blur(8px);
+}
+.sync-row{ display:flex; align-items:center; gap:10px; font-weight:800; font-size:13px; }
+.sync-sub{ margin-top:6px; font-size:12px; color: var(--muted); line-height:1.2; }
+.sync-dot{ width:10px; height:10px; border-radius:999px; background:#999; box-shadow:0 0 0 3px rgba(153,153,153,.15); }
+.sync-dot.ok{ background:#22c55e; box-shadow:0 0 0 3px rgba(34,197,94,.18); }
+.sync-dot.warn{ background:#f59e0b; box-shadow:0 0 0 3px rgba(245,158,11,.18); }
+.sync-dot.err{ background:#ef4444; box-shadow:0 0 0 3px rgba(239,68,68,.18); }
+.sync-dot.run{
+  background:#3b82f6;
+  box-shadow:0 0 0 3px rgba(59,130,246,.18);
+  animation: syncPulse 1.1s infinite ease-in-out;
+}
+@keyframes syncPulse{
+  0%{ transform:scale(1); opacity:1;}
+  50%{ transform:scale(1.25); opacity:.75;}
+  100%{ transform:scale(1); opacity:1;}
+}
+
+/* Debug panel inside Importar/Exportar */
+#sb-debug{ margin-top:14px; padding:12px; border-radius:14px; border:1px dashed rgba(255,255,255,.14); display:none; }
+#sb-debug pre{ white-space:pre-wrap; font-size:11px; color:rgba(255,255,255,.78); margin:10px 0 0; max-height:180px; overflow:auto; }
 </style>
 <link rel="manifest" href="./manifest.json">
 <meta name="theme-color" content="#0b0b0c">
@@ -571,10 +608,10 @@ label{
             <div class="form-group">
               <label>Forma de Pagamento</label>
               <div class="pgto-toggle">
-                <div class="pgto-opt sel-pago" id="opt-pago" onclick="selPgto('pago')">✅ Pago</div>
+                <div class="pgto-opt" id="opt-pago" onclick="selPgto('pago')">✅ Pago</div>
                 <div class="pgto-opt" id="opt-fiado" onclick="selPgto('fiado')">📋 Fiado</div>
               </div>
-              <input type="hidden" id="venda-pgto" value="pago">
+              <input type="hidden" id="venda-pgto" value="">
             </div>
             <button class="btn btn-primary" style="width:100%;margin-top:8px" onclick="finalizarVenda()">Finalizar Venda</button>
           </div>
@@ -657,6 +694,56 @@ label{
     <div class="card-value" id="rel-cliente-mais-gastou" style="font-size:16px">—</div>
     <div style="color:var(--muted);font-size:12px;margin-top:6px" id="rel-cliente-mais-gastou-val">R$ 0,00</div>
   </div>
+
+
+<div class="card" id="rel-tabela-dia" style="margin-top:18px">
+  <div style="display:flex;align-items:flex-end;justify-content:space-between;gap:16px;flex-wrap:wrap">
+    <div>
+      <div class="card-label" style="margin-bottom:6px">RELATÓRIO DIÁRIO</div>
+      <div style="color:var(--muted);font-size:12px">Produtos vendidos no dia + pagamentos recebidos no dia (fiado só conta quando for marcado como pago).</div>
+    </div>
+    <div style="display:flex;gap:10px;flex-wrap:wrap;align-items:flex-end">
+      <div>
+        <div style="font-size:11px;color:var(--muted);margin-bottom:6px">Dia</div>
+        <select id="rel-dia" style="min-width:90px"></select>
+      </div>
+      <div>
+        <div style="font-size:11px;color:var(--muted);margin-bottom:6px">Mês</div>
+        <select id="rel-mes" style="min-width:140px"></select>
+      </div>
+      <div>
+        <div style="font-size:11px;color:var(--muted);margin-bottom:6px">Ano</div>
+        <select id="rel-ano" style="min-width:110px"></select>
+      </div>
+      <button class="btn btn-secondary" onclick="relSetHoje()">Hoje</button>
+      <button class="btn btn-primary" onclick="renderRelatorioDiario()">Aplicar</button>
+    </div>
+  </div>
+
+  <div style="display:flex;gap:18px;flex-wrap:wrap;margin-top:14px">
+    <div style="color:var(--muted);font-size:12px">Vendas do dia: <b id="rel-resumo-vendas">0</b></div>
+    <div style="color:var(--muted);font-size:12px">Pagamentos recebidos: <b id="rel-resumo-pagamentos">0</b></div>
+  </div>
+
+  <div style="margin-top:12px;overflow:auto;border-radius:14px;border:1px solid var(--border)">
+    <table>
+      <thead>
+        <tr>
+          <th style="width:120px">Tipo</th>
+          <th>Descrição</th>
+          <th style="width:110px">Qtd</th>
+          <th style="width:160px">Valor</th>
+          <th style="width:160px">Obs/Data</th>
+        </tr>
+      </thead>
+      <tbody id="rel-tbody">
+        <tr><td colspan="5" style="color:var(--muted)">—</td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+</div>
 </div>
 </div>
 
@@ -686,12 +773,21 @@ label{
         <button class="btn btn-primary" onclick="sbLogin()">Entrar</button>
         <button class="btn btn-secondary" onclick="sbSignup()">Criar conta</button>
         <button class="btn btn-secondary" onclick="sbLogout()">Sair</button>
-        <button class="btn btn-secondary" onclick="sbSyncPull()">⬇️ Puxar do online</button>
-        <button class="btn btn-secondary" onclick="sbSyncPush()">⬆️ Enviar para o online</button>
-      </div>
+        <!-- Sync é automático. Controles manuais ficam no modo debug (?debug=1). -->
+</div>
 
       <div style="margin-top:10px;color:var(--muted);font-size:12px">
-        Status: <span id="sb-status">desconectado</span>
+        Status: <span id="sb-status">desconectado</span> <button class="btn btn-secondary" id="btn-diagnostico" style="padding:6px 10px;font-size:12px;margin-left:10px;display:none" onclick="toggleDiagnostico()">🛠 Diagnóstico</button>
+      </div>
+
+      <div id="sb-debug">
+        <div style="display:flex;gap:10px;flex-wrap:wrap">
+          <button class="btn btn-secondary" onclick="sbSyncPull(true,true)">⬇️ Forçar pull</button>
+          <button class="btn btn-secondary" onclick="sbSyncPush(true)">⬆️ Forçar push</button>
+          <button class="btn btn-secondary" onclick="sbExportSyncLogs()">📋 Copiar logs</button>
+          <button class="btn btn-secondary" onclick="sbClearSyncLogs()">🧹 Limpar logs</button>
+        </div>
+        <pre id="sb-log">—</pre>
       </div>
     </div>
 
@@ -908,6 +1004,10 @@ function save(){
       sbSyncPush(false);
     }, 700);
   }
+
+  try{ saveBackup('auto'); }catch(e){}
+  __SYNC.pending = true;
+  syncUpdate();
 }
 
 // ─── NAVEGAÇÃO ────────────────────────────────────────────────────────────────
@@ -1244,6 +1344,12 @@ function selPgto(tipo){
   document.getElementById('opt-fiado').className='pgto-opt'+(tipo==='fiado'?' sel-fiado':'');
 }
 
+function resetVendaForm(){
+  try{ document.getElementById('venda-cliente').value=''; }catch(e){}
+  try{ selPgto(''); }catch(e){}
+}
+
+
 function renderProdutosVenda(){
   var busca=(document.getElementById('busca-venda')?document.getElementById('busca-venda').value:'').toLowerCase();
   var lista=db.produtos.filter(function(p){return p && !p.excluido && p.estoque>0 && p.nome.toLowerCase().indexOf(busca)>=0;});
@@ -1320,6 +1426,7 @@ function finalizarVenda(){
   var nomeCliente=document.getElementById('venda-cliente').value.trim();
   if(!nomeCliente){alert('Informe o nome do cliente.');return;}
   var pgto=document.getElementById('venda-pgto').value;
+  if(pgto!=='pago' && pgto!=='fiado'){alert('Escolha a forma de pagamento: Pago ou Fiado.');return;}
   var dataVenda=document.getElementById('venda-data') ? document.getElementById('venda-data').value : '';
   var isoVenda = dataVenda ? (new Date(dataVenda+'T12:00:00')).toISOString() : new Date().toISOString();
 
@@ -1349,7 +1456,9 @@ function finalizarVenda(){
 
   save();atualizarBadgeFiado();
   alert(pgto==='fiado'?'📋 Venda no fiado!\n'+nomeCliente+' deve '+fmt(total):'✅ Venda finalizada!\n'+nomeCliente+' pagou '+fmt(total));
-  limparCarrinho(); renderDashboard(); renderHistorico(); renderFiado(); renderRelatorios();
+  limparCarrinho();
+  resetVendaForm();
+  renderDashboard(); renderHistorico(); renderFiado(); renderRelatorios();
 }
 
 // ─── FIADO ────────────────────────────────────────────────────────────────────
@@ -1672,7 +1781,194 @@ function renderRelatorios(){
   var el4v = document.getElementById('rel-cliente-mais-gastou-val');
   if(el4) el4.textContent = topCliGasto ? topCliGasto[0] : '—';
   if(el4v) el4v.textContent = topCliGasto ? fmt(topCliGasto[1]) : fmt(0);
+  try{ relInitFiltros(); renderRelatorioDiario(); }catch(e){}
 }
+
+
+
+/* ─── RELATÓRIO DIÁRIO (Produtos vendidos + Pagamentos recebidos) ───────── */
+
+function relPad2(n){ n=String(n); return n.length===1?('0'+n):n; }
+
+function relInitFiltros(){
+  var selDia=document.getElementById('rel-dia');
+  var selMes=document.getElementById('rel-mes');
+  var selAno=document.getElementById('rel-ano');
+  if(!selDia||!selMes||!selAno) return;
+
+  // popular dias 1..31
+  if(!selDia.options.length){
+    selDia.innerHTML = '<option value="">(dia)</option>' + Array.from({length:31}, function(_,i){
+      var d=i+1; return '<option value="'+d+'">'+d+'</option>';
+    }).join('');
+  }
+
+  // meses
+  if(!selMes.options.length){
+    var meses=['Janeiro','Fevereiro','Março','Abril','Maio','Junho','Julho','Agosto','Setembro','Outubro','Novembro','Dezembro'];
+    selMes.innerHTML = '<option value="">(mês)</option>' + meses.map(function(n,i){ return '<option value="'+(i+1)+'">'+n+'</option>'; }).join('');
+  }
+
+  // anos (do ano atual até -10)
+  if(!selAno.options.length){
+    var y = new Date().getFullYear();
+    var opts = ['<option value="">(ano)</option>'];
+    for(var k=0;k<11;k++){
+      opts.push('<option value="'+(y-k)+'">'+(y-k)+'</option>');
+    }
+    selAno.innerHTML = opts.join('');
+  }
+
+  // default: hoje quando não selecionado
+  if(!selDia.value || !selMes.value || !selAno.value){
+    relSetHoje();
+  }
+}
+
+function relSetHoje(){
+  var d=new Date();
+  var selDia=document.getElementById('rel-dia');
+  var selMes=document.getElementById('rel-mes');
+  var selAno=document.getElementById('rel-ano');
+  if(!selDia||!selMes||!selAno) return;
+  selDia.value = String(d.getDate());
+  selMes.value = String(d.getMonth()+1);
+  selAno.value = String(d.getFullYear());
+}
+
+function relSelectedDateISO(){
+  relInitFiltros();
+  var selDia=document.getElementById('rel-dia');
+  var selMes=document.getElementById('rel-mes');
+  var selAno=document.getElementById('rel-ano');
+
+  var d = parseInt(selDia.value||'0',10);
+  var m = parseInt(selMes.value||'0',10);
+  var y = parseInt(selAno.value||'0',10);
+
+  // se algo estiver vazio, assume hoje
+  if(!d || !m || !y){
+    relSetHoje();
+    d = parseInt(selDia.value,10);
+    m = parseInt(selMes.value,10);
+    y = parseInt(selAno.value,10);
+  }
+
+  // cria ISO "meio-dia" pra evitar offset
+  return new Date(y+'-'+relPad2(m)+'-'+relPad2(d)+'T12:00:00').toISOString();
+}
+
+function sameDay(isoA, isoB){
+  try{
+    var a=new Date(isoA), b=new Date(isoB);
+    return a.getFullYear()===b.getFullYear() && a.getMonth()===b.getMonth() && a.getDate()===b.getDate();
+  }catch(e){ return false; }
+}
+
+function renderRelatorioDiario(){
+  relInitFiltros();
+  var isoRef = relSelectedDateISO();
+
+  // 1) Produtos vendidos no dia (inclui pago + fiado, pois a saída de estoque ocorreu no dia da venda)
+  var prodAgg = {}; // key -> {nome,qtd,valor}
+  var vendasNoDia = 0;
+
+  db.vendas.forEach(function(v){
+    if(!v || !v.data) return;
+    if(!sameDay(v.data, isoRef)) return;
+    vendasNoDia++;
+    (v.itens||[]).forEach(function(i){
+      if(!i) return;
+      var key = (i.idx!=null ? ('#'+i.idx) : (i.nome||''));
+      if(!key) return;
+      if(!prodAgg[key]) prodAgg[key] = {nome:i.nome||('Produto '+key), qtd:0, valor:0};
+      prodAgg[key].qtd += Number(i.qtd||0);
+      prodAgg[key].valor += Number(i.preco||0) * Number(i.qtd||0);
+    });
+  });
+
+  var produtos = Object.values(prodAgg).sort(function(a,b){ return b.valor - a.valor; });
+
+  // 2) Pagamentos recebidos no dia
+  // - venda paga: conta no dia da venda (v.data)
+  // - fiado: conta somente no dia que foi marcado como pago (v.fiadoPagoData)
+  var pagamentos = [];
+  var totalPag = 0;
+
+  db.vendas.forEach(function(v){
+    if(!v) return;
+
+    var isPago = (v.pgto==='pago');
+    var isFiadoPago = (v.pgto==='fiado' && v.fiadoPago && v.fiadoPagoData);
+
+    var payDate = isPago ? v.data : (isFiadoPago ? v.fiadoPagoData : null);
+    if(!payDate) return;
+    if(!sameDay(payDate, isoRef)) return;
+
+    pagamentos.push({
+      tipo: isPago ? 'Pagamento' : 'Fiado pago',
+      desc: (v.cliente||'Cliente') + ' — ' + (isPago ? 'Venda paga' : 'Quitação fiado'),
+      qtd: '',
+      valor: Number(v.total||0),
+      obs: isPago ? '' : (v.fiadoPagoObs||'')
+    });
+    totalPag += Number(v.total||0);
+  });
+
+  pagamentos.sort(function(a,b){ return b.valor - a.valor; });
+
+  // montar tabela única: produtos + separador + pagamentos
+  var tbody = document.getElementById('rel-tbody');
+  if(!tbody) return;
+
+  var rows = [];
+
+  // header produtos
+  rows.push('<tr><td colspan="5" style="font-weight:800">Produtos vendidos no dia</td></tr>');
+  if(!produtos.length){
+    rows.push('<tr><td colspan="5" style="color:var(--muted)">Nenhum produto vendido neste dia.</td></tr>');
+  }else{
+    produtos.forEach(function(p){
+      rows.push('<tr>'
+        +'<td><span class="badge badge-ok">Produto</span></td>'
+        +'<td>'+esc(p.nome)+'</td>'
+        +'<td>'+p.qtd+'</td>'
+        +'<td>'+fmt(p.valor)+'</td>'
+        +'<td style="color:var(--muted)">'+(new Date(isoRef).toLocaleDateString('pt-BR'))+'</td>'
+        +'</tr>');
+    });
+  }
+
+  // separador
+  rows.push('<tr><td colspan="5" style="height:10px;background:transparent;border-bottom:none"></td></tr>');
+
+  // header pagamentos
+  rows.push('<tr><td colspan="5" style="font-weight:800">Pagamentos recebidos no dia</td></tr>');
+  if(!pagamentos.length){
+    rows.push('<tr><td colspan="5" style="color:var(--muted)">Nenhum pagamento recebido neste dia.</td></tr>');
+  }else{
+    pagamentos.forEach(function(p){
+      rows.push('<tr>'
+        +'<td><span class="badge '+(p.tipo==='Fiado pago'?'badge-warn':'badge-ok')+'">'+esc(p.tipo)+'</span></td>'
+        +'<td>'+esc(p.desc)+'</td>'
+        +'<td>'+ (p.qtd||'—') +'</td>'
+        +'<td>'+fmt(p.valor)+'</td>'
+        +'<td style="color:var(--muted)">'+esc(p.obs||'')+'</td>'
+        +'</tr>');
+    });
+  }
+
+  tbody.innerHTML = rows.join('');
+
+  // resumos
+  var elV = document.getElementById('rel-resumo-vendas');
+  var elP = document.getElementById('rel-resumo-pagamentos');
+  if(elV) elV.textContent = vendasNoDia + ' (' + produtos.reduce(function(s,p){return s+p.qtd;},0) + ' itens)';
+  if(elP) elP.textContent = fmt(totalPag);
+
+}
+
+/* chama ao renderizar relatórios */
 
 // ─── UTILS ────────────────────────────────────────────────────────────────────
 function fifoConsumir(produtoIdx, qtd, silent){
@@ -1807,6 +2103,151 @@ function limparBanco(){
 
 
 
+
+/* ─── SYNC HELPERS ───────────────────────────────────────────── */
+var __SYNC = {
+  pending: false,
+  lastPullAt: null,
+  lastPushAt: null,
+  running: false,
+  online: navigator.onLine,
+  logs: []
+};
+
+function sbLog(msg, level){
+  var ts = new Date().toLocaleString('pt-BR');
+  var line = '['+ts+']' + (level?(' ['+level+']'):'') + ' ' + msg;
+  __SYNC.logs.push(line);
+  if(__SYNC.logs.length > 200) __SYNC.logs.shift();
+  try{
+    var pre = document.getElementById('sb-log');
+    if(pre) pre.textContent = __SYNC.logs.slice(-80).join('\n') || '—';
+  }catch(e){}
+}
+
+function sbExportSyncLogs(){
+  try{
+    var txt = (__SYNC.logs||[]).join('\n');
+    navigator.clipboard.writeText(txt);
+    alert('Logs copiados.');
+  }catch(e){
+    alert('Não foi possível copiar automaticamente. Abra o modo debug e copie manualmente.');
+  }
+}
+
+function sbClearSyncLogs(){
+  __SYNC.logs = [];
+  try{ var pre=document.getElementById('sb-log'); if(pre) pre.textContent='—'; }catch(e){}
+
+function toggleDiagnostico(){
+  try{
+    var dbg=document.getElementById('sb-debug');
+    if(!dbg) return;
+    var show = (dbg.style.display==='none' || !dbg.style.display);
+    dbg.style.display = show ? 'block' : 'none';
+    if(show){
+      // atualiza o painel imediatamente
+      var pre=document.getElementById('sb-log');
+      if(pre) pre.textContent = (__SYNC.logs||[]).slice(-80).join('\n') || '—';
+    }
+  }catch(e){}
+}
+
+}
+
+function syncIndicatorShow(show){
+  var el=document.getElementById('sync-indicator');
+  if(!el) return;
+  el.style.display = show ? 'block' : 'none';
+}
+
+function syncIndicatorSet(state, text, sub){
+  var dot=document.getElementById('sync-dot');
+  var t=document.getElementById('sync-text');
+  var s=document.getElementById('sync-sub');
+  if(!dot||!t||!s) return;
+  dot.className='sync-dot ' + (state||'');
+  t.textContent = text || 'Sincronização';
+  s.textContent = sub || '—';
+}
+
+function updateDiagButton(){
+  try{ var b=document.getElementById('btn-diagnostico'); if(!b) return;
+    b.style.display = (window.__SB && window.__SB.userId) ? 'inline-block' : 'none';
+  }catch(e){}
+}
+
+function syncUpdate(){
+  updateDiagButton();
+  syncIndicatorShow(true);
+  __SYNC.online = navigator.onLine;
+
+  if(!__SYNC.online){
+    syncIndicatorSet('warn','Offline','Sem internet. Alterações ficarão pendentes.');
+    return;
+  }
+  if(__SYNC.running){
+    syncIndicatorSet('run','Sincronizando…','Puxando/enviando dados.');
+    return;
+  }
+  if(__SYNC.pending){
+    syncIndicatorSet('warn','Alterações pendentes','Aguardando envio automático.');
+    return;
+  }
+  var lp = __SYNC.lastPullAt ? ('Último pull: ' + __SYNC.lastPullAt) : 'Último pull: —';
+  var ps = __SYNC.lastPushAt ? (' / push: ' + __SYNC.lastPushAt) : '';
+  syncIndicatorSet('ok','Sincronizado', lp + ps);
+}
+
+function saveBackup(reason){
+  // mantém últimos 5 backups compactos
+  try{
+    var keyIndex = "mrevenda_backup_index";
+    var idx = JSON.parse(localStorage.getItem(keyIndex) || "[]");
+    var k = "mrevenda_backup_" + Date.now() + (reason ? ("_"+reason) : "");
+    localStorage.setItem(k, localStorage.getItem("mrevenda"));
+    idx.push(k);
+    while(idx.length > 5){
+      var rm = idx.shift();
+      try{ localStorage.removeItem(rm); }catch(e){}
+    }
+    localStorage.setItem(keyIndex, JSON.stringify(idx));
+  }catch(e){}
+}
+
+window.addEventListener('online', function(){ sbLog('Conexão retomada.'); syncUpdate(); });
+window.addEventListener('offline', function(){ sbLog('Sem conexão.'); syncUpdate(); });
+document.addEventListener('visibilitychange', function(){
+  if(!document.hidden && window.__SB && window.__SB.userId){
+    // ao voltar para a aba: puxa mais rápido
+    sbLog('App em foco: pull rápido.');
+    sbSyncPull(false, false);
+  }
+});
+
+/* Supabase realtime (se habilitado no projeto) */
+function sbStartRealtime(){
+  try{
+    if(!window.__SB || !window.__SB.client || !window.__SB.userId) return;
+    if(window.__SB._realtimeStarted) return;
+    window.__SB._realtimeStarted = true;
+
+    var filter = 'user_id=eq.' + window.__SB.userId;
+    var ch = window.__SB.client
+      .channel('revenda-db-' + window.__SB.userId)
+      .on('postgres_changes', { event: '*', schema: 'public', table: 'revenda_db', filter: filter }, function(payload){
+        sbLog('Realtime: mudança detectada, puxando…');
+        sbSyncPull(false, false);
+      })
+      .subscribe(function(status){
+        sbLog('Realtime status: ' + status);
+      });
+
+    window.__SB._realtimeChannel = ch;
+  }catch(e){
+    sbLog('Realtime indisponível (ok).', 'warn');
+  }
+}
 // ─── SUPABASE ONLINE SYNC ──────────────────────────────────────────────────
 // Preencha as constantes abaixo com os dados do seu projeto Supabase:
 var SUPABASE_URL = "https://bnsdsipilwcoipaqavfv.supabase.co";      // ex: https://xxxx.supabase.co
@@ -1873,6 +2314,8 @@ sbSyncPull(false, true).then(function(ok){
   if(ok && window.__SYNC_GUARD) window.__SYNC_GUARD.pulledAfterLogin = true;
 });
 sbStartAutoPull();
+  sbStartRealtime();
+  syncUpdate();
       }else{
         sbSetStatus('desconectado');
         sbStopAutoPull();
@@ -1891,6 +2334,8 @@ sbSyncPull(false, true).then(function(ok){
   if(ok && window.__SYNC_GUARD) window.__SYNC_GUARD.pulledAfterLogin = true;
 });
 sbStartAutoPull();
+  sbStartRealtime();
+  syncUpdate();
       }else{
         window.__SB.userId = null;
         window.__SB.email = null;
@@ -1906,7 +2351,12 @@ sbStartAutoPull();
 
 async function sbLogin(){
   try{
-    if(!window.__SB.client){ sbInit(); }
+    if(!window.__SB.client){ sbInit();
+// debug UI
+var __showDebug = (location.search||'').indexOf('debug=1')>=0;
+try{ var dbg=document.getElementById('sb-debug'); if(dbg) dbg.style.display = __showDebug ? 'block' : 'none'; }catch(e){}
+try{ var b=document.getElementById('btn-diagnostico'); if(b) b.style.display = (window.__SB && window.__SB.userId) ? 'inline-block' : 'none'; }catch(e){}
+ }
     var email = (document.getElementById('sb-email')||{}).value || '';
     var pass = (document.getElementById('sb-pass')||{}).value || '';
     if(!email || !pass){ alert('Informe email e senha.'); return; }
@@ -1947,6 +2397,7 @@ async function sbLogout(){
 
 // Puxa do online (substitui o banco local)
 async function sbSyncPull(showAlerts=true, silent=false){
+  __SYNC.running = true; sbLog('Pull iniciado.'); syncUpdate();
   try{
     if(!window.__SB.client){ sbInit(); }
     if(!window.__SB.userId){ alert('Faça login para puxar do online.'); return false; }
@@ -2037,6 +2488,7 @@ return true;
 
 // Envia para o online (upsert)
 async function sbSyncPush(showAlerts=true){
+  __SYNC.running = true; sbLog('Push iniciado.'); syncUpdate();
   try{
     if(!window.__SB.client){ sbInit(); }
     if(!window.__SB.userId){
@@ -2121,5 +2573,14 @@ setupTabelaProdutosListeners();
   }
 </script>
 
+
+<!-- Sync Indicator -->
+<div id="sync-indicator" class="sync-indicator" style="display:none">
+  <div class="sync-row">
+    <span class="sync-dot" id="sync-dot"></span>
+    <span id="sync-text">Sincronização</span>
+  </div>
+  <div class="sync-sub" id="sync-sub">—</div>
+</div>
 </body>
 </html>
