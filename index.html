@@ -1056,7 +1056,6 @@ function salvarProduto(){
   var cat = document.getElementById('prod-cat').value.trim();
   var fornecedor = (document.getElementById('prod-fornecedor')||{}).value ? document.getElementById('prod-fornecedor').value.trim() : '';
   var img = document.getElementById('prod-img') ? document.getElementById('prod-img').value.trim() : '';
-  var img = document.getElementById('prod-img') ? document.getElementById('prod-img').value.trim() : '';
   var estoqueBaixo = parseInt((document.getElementById('prod-estoque-baixo')||{}).value||'5',10);
   if(isNaN(estoqueBaixo) || estoqueBaixo<0) estoqueBaixo = 5;
   var dataCompra = (document.getElementById('prod-data-compra')||{}).value || '';
@@ -1215,8 +1214,7 @@ function renderProdutos(){
   if(!indices.length){
     tbody.innerHTML='<tr><td colspan="7" style="text-align:center;color:var(--muted);padding:32px">Nenhum produto cadastrado.</td></tr>';
     setupTabelaProdutosListeners();
-    sbInit();
-return;
+    return;
   }
   var html='';
   indices.forEach(function(i){
@@ -1835,7 +1833,7 @@ function sbStartAutoPull(){
   // a cada 20s tenta puxar atualizações (leve)
   window.__SB.autoPullTimer = setInterval(function(){
     sbAutoPullTick();
-  }, 20000);
+  }, 5000);
 }
 
 function sbStopAutoPull(){
@@ -2053,6 +2051,9 @@ window.sbSyncPush = sbSyncPush;
 // ─── INIT ─────────────────────────────────────────────────────────────────────
 
 atualizarBadgeFiado();
+
+// inicializa Supabase (para auto sync funcionar sem cliques)
+sbInit();
 // dashboard: defaults
 try{
   var n=new Date();
