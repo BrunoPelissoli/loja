@@ -179,6 +179,250 @@ label{
   font-size:1.35rem !important;
 }
 
+
+
+/* ─── PADRONIZAÇÃO (tamanhos) ─────────────────────────────────────────── */
+.nav-item{ font-size:14px; }
+.nav-item svg{ width:18px; height:18px; }
+.tabs{ flex-wrap:wrap; }
+.tab{ font-size:14px; padding:10px 16px; }
+.filter-bar{ align-items:center; }
+.filter-bar select{ min-width:150px; }
+@media (max-width: 820px){
+  .filter-bar select{ min-width:0; }
+}
+
+
+/* select dropdown (opções) — melhora contraste no menu nativo */
+.filter-bar select option{ color:#111; background:#fff; }
+
+
+/* TITULOS GRANDES (abas principais) */
+.page-title{
+  font-size:32px !important;
+  font-weight:700;
+  letter-spacing:.3px;
+}
+.page-title small{
+  display:block;
+  font-size:15px;
+  font-weight:400;
+  margin-top:6px;
+  opacity:.85;
+}
+
+
+/* PRODUTOS GRANDES (cards de produtos) */
+.prod-card{
+  padding:22px !important;
+  border-radius:16px !important;
+}
+
+.prod-card h3{
+  font-size:20px !important;
+  margin-bottom:10px !important;
+}
+
+.prod-card .prod-preco{
+  font-size:22px !important;
+  font-weight:700 !important;
+}
+
+.prod-card .prod-estoque{
+  font-size:14px !important;
+  margin-top:6px !important;
+}
+
+.prod-grid{
+  gap:18px !important;
+}
+
+
+/* PRODUTOS EXTRA GRANDES (≈ +40%) */
+.prod-card{
+  padding:30px !important;
+  border-radius:20px !important;
+}
+
+.prod-card h3{
+  font-size:28px !important;
+  margin-bottom:14px !important;
+}
+
+.prod-card .prod-preco{
+  font-size:30px !important;
+  font-weight:800 !important;
+}
+
+.prod-card .prod-estoque{
+  font-size:18px !important;
+  margin-top:10px !important;
+}
+
+.prod-grid{
+  gap:28px !important;
+}
+
+
+/* ─────────────────────────────────────────────
+   CATALOGO PREMIUM (layout vitrine)
+───────────────────────────────────────────── */
+
+.prod-grid{
+  display:grid !important;
+  grid-template-columns: repeat(2, 1fr) !important; /* 2 colunas desktop */
+  gap:40px !important;
+  max-width:1100px;
+  margin:40px auto !important;
+}
+
+@media (max-width: 900px){
+  .prod-grid{
+    grid-template-columns: 1fr !important; /* 1 coluna tablet/mobile */
+  }
+}
+
+.prod-card{
+  padding:38px !important;
+  border-radius:24px !important;
+  transition: all .25s ease;
+  border:1px solid rgba(255,255,255,.08) !important;
+}
+
+.prod-card:hover{
+  transform: translateY(-6px);
+  box-shadow: 0 20px 40px rgba(0,0,0,.45);
+  border-color: rgba(59,130,246,.35) !important;
+}
+
+.prod-card h3{
+  font-size:34px !important;
+  font-weight:700 !important;
+}
+
+.prod-card .prod-preco{
+  font-size:36px !important;
+  font-weight:800 !important;
+  margin-top:12px !important;
+}
+
+.prod-card .prod-estoque{
+  font-size:20px !important;
+  margin-top:14px !important;
+  opacity:.85;
+}
+
+
+/* ─── VITRINE PREMIUM (imagem + botão grande) ─────────────────────────── */
+.prod-media{
+  position:relative;
+  width:100%;
+  height:170px;
+  border-radius:18px;
+  overflow:hidden;
+  background: radial-gradient(1200px 500px at 20% 0%, rgba(59,130,246,.22), rgba(0,0,0,0));
+  border:1px solid rgba(255,255,255,.08);
+  margin-bottom:18px;
+}
+
+.prod-img{
+  width:100%;
+  height:100%;
+  object-fit:cover;
+  display:block;
+  transform: scale(1.02);
+}
+
+.prod-placeholder{
+  width:100%;
+  height:100%;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:64px;
+  font-weight:800;
+  letter-spacing:1px;
+  color:rgba(255,255,255,.88);
+  background: linear-gradient(135deg, rgba(59,130,246,.35), rgba(16,185,129,.20));
+}
+
+.prod-badge{
+  position:absolute;
+  top:14px;
+  left:14px;
+  z-index:2;
+  padding:8px 12px;
+  border-radius:999px;
+  font-size:13px;
+  font-weight:700;
+  letter-spacing:.2px;
+  box-shadow: 0 10px 20px rgba(0,0,0,.35);
+}
+
+.btn-vender{
+  width:100%;
+  padding:14px 16px !important;
+  border-radius:14px !important;
+  font-size:16px !important;
+  font-weight:800 !important;
+  margin-top:18px !important;
+}
+
+
+/* ─── AJUSTE NOVA VENDA (tipografia menor + card mais largo) ───────────── */
+
+/* deixa o card um pouco mais largo */
+#grade-produtos-venda{
+  max-width:1200px;
+  margin:0 auto;
+}
+
+#grade-produtos-venda .prod-card{
+  padding:28px !important;
+}
+
+/* reduz bastante as fontes apenas na tela de NOVA VENDA */
+#grade-produtos-venda .prod-card h3{
+  font-size:22px !important;
+}
+
+#grade-produtos-venda .prod-preco{
+  font-size:24px !important;
+}
+
+#grade-produtos-venda .prod-estoque{
+  font-size:16px !important;
+}
+
+#grade-produtos-venda .prod-placeholder{
+  font-size:48px !important;
+}
+
+
+
+
+/* ─── NOVA VENDA 3 COLUNAS ───────────────────────────── */
+
+#grade-produtos-venda{
+  max-width:1400px !important;
+  margin:0 auto !important;
+}
+
+@media (min-width: 900px){
+  #grade-produtos-venda{
+    display:grid !important;
+    grid-template-columns: repeat(3, 1fr) !important;
+    gap:32px !important;
+  }
+}
+
+@media (max-width: 899px){
+  #grade-produtos-venda{
+    display:grid !important;
+    grid-template-columns: 1fr !important;
+    gap:24px !important;
+  }
+}
 </style>
 <link rel="manifest" href="./manifest.json">
 <meta name="theme-color" content="#0b0b0c">
@@ -238,14 +482,14 @@ label{
           <option value="mes-passado">Mês passado</option>
           <option value="mes-ano">Escolher mês/ano</option>
         </select>
-        <select id="dash-filtro-mes" style="display:none" onchange="renderDashboard()">
+        <select id="dash-filtro-mes" onchange="renderDashboard()">
           <option value="0">Janeiro</option><option value="1">Fevereiro</option><option value="2">Março</option>
           <option value="3">Abril</option><option value="4">Maio</option><option value="5">Junho</option>
           <option value="6">Julho</option><option value="7">Agosto</option><option value="8">Setembro</option>
           <option value="9">Outubro</option><option value="10">Novembro</option><option value="11">Dezembro</option>
         </select>
-        <select id="dash-filtro-ano" style="display:none" onchange="renderDashboard()"></select>
-      </div>
+        <select id="dash-filtro-ano" onchange="renderDashboard()"></select>
+</div>
     </div>
     <div id="dash-fiado-alerta"></div>
     <div class="cards-grid">
@@ -272,7 +516,18 @@ label{
     </div>
     <div class="charts-grid">
       <div class="chart-area"><div class="chart-title" id="chart-vendas-title">Vendas dos últimos 7 dias</div><canvas id="chartVendas" height="130"></canvas></div>
-      <div class="chart-area"><div class="chart-title">Produtos com estoque baixo</div><div id="estoque-alerta"></div></div>
+      <div class="chart-area"><div class="chart-title">Produtos com estoque baixo</div><div id="estoque-alerta"></div>
+<div class="cards-grid" style="margin-top:18px">
+  <div class="card">
+    <div class="card-label">Custo do Estoque</div>
+    <div class="card-value" id="dash-estoque-custo">R$ 0,00</div>
+  </div>
+  <div class="card">
+    <div class="card-label">Valor do Estoque</div>
+    <div class="card-value" id="dash-estoque-valor">R$ 0,00</div>
+  </div>
+</div>
+</div>
     </div>
   </div>
 
@@ -344,6 +599,7 @@ label{
     <div class="tabs">
       <div class="tab active" id="tab-hist-vendas" onclick="switchHistoricoTab('vendas')">Vendas</div>
       <div class="tab" id="tab-hist-compras" onclick="switchHistoricoTab('compras')">Compras</div>
+      <div class="tab" id="tab-hist-baixas" onclick="switchHistoricoTab('baixas')">Baixas</div>
     </div>
 
     <div id="hist-vendas">
@@ -363,19 +619,46 @@ label{
         </table>
       </div>
     </div>
+
+<div id="hist-baixas" style="display:none">
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>Data</th><th>Produto</th><th>Qtd</th><th>Motivo</th></tr></thead>
+      <tbody id="tabela-baixas"></tbody>
+    </table>
+  </div>
+</div>
+
+
   </div>
 
   <!-- RELATÓRIOS -->
   <div id="page-relatorios" class="page">
-    <div class="page-header"><div class="page-title">Relatórios <small>Análise do negócio</small></div></div>
-    <div class="cards-grid" style="margin-bottom:24px">
-      <div class="card"><div class="card-label" style="margin-bottom:8px">CUSTO DO ESTOQUE</div><div class="card-value" id="rel-estoque-custo">R$ 0,00</div></div>
-      <div class="card"><div class="card-label" style="margin-bottom:8px">VALOR DO ESTOQUE</div><div class="card-value" id="rel-ticket">R$ 0,00</div></div>
-      <div class="card"><div class="card-label" style="margin-bottom:8px">MARGEM MÉDIA</div><div class="card-value" id="rel-margem">0%</div></div>
-      <div class="card"><div class="card-label" style="margin-bottom:8px">PRODUTO + VENDIDO</div><div class="card-value" id="rel-top" style="font-size:16px">—</div></div>
-    </div>
-    <div class="chart-area"><div class="chart-title">Receita x Lucro por produto</div><canvas id="chartProdutos" height="120"></canvas></div>
+
+<div class="page-header"><div class="page-title">Relatórios <small>Insights do negócio</small></div></div>
+
+<div class="cards-grid" style="margin-bottom:24px">
+  <div class="card">
+    <div class="card-label" style="margin-bottom:8px">PRODUTO MAIS VENDIDO</div>
+    <div class="card-value" id="rel-prod-mais-vendido" style="font-size:16px">—</div>
   </div>
+  <div class="card">
+    <div class="card-label" style="margin-bottom:8px">PRODUTO COM MAIS LUCRO</div>
+    <div class="card-value" id="rel-prod-mais-lucro" style="font-size:16px">—</div>
+    <div style="color:var(--muted);font-size:12px;margin-top:6px" id="rel-prod-mais-lucro-val">R$ 0,00</div>
+  </div>
+  <div class="card">
+    <div class="card-label" style="margin-bottom:8px">CLIENTE QUE COMPROU MAIS ITENS</div>
+    <div class="card-value" id="rel-cliente-mais-itens" style="font-size:16px">—</div>
+    <div style="color:var(--muted);font-size:12px;margin-top:6px" id="rel-cliente-mais-itens-qtd">0 itens</div>
+  </div>
+  <div class="card">
+    <div class="card-label" style="margin-bottom:8px">CLIENTE QUE MAIS GASTOU</div>
+    <div class="card-value" id="rel-cliente-mais-gastou" style="font-size:16px">—</div>
+    <div style="color:var(--muted);font-size:12px;margin-top:6px" id="rel-cliente-mais-gastou-val">R$ 0,00</div>
+  </div>
+</div>
+</div>
 
 <!-- DADOS -->
   <div id="page-dados" class="page">
@@ -464,6 +747,7 @@ label{
       <datalist id="cat-list"></datalist>
     </div>
     <div class="form-group"><label>Fornecedor / Onde comprou</label><input type="text" id="prod-fornecedor" placeholder="Ex: Atacado X, Mercado Y"></div>
+    <div class="form-group"><label>Imagem (URL opcional)</label><input type="text" id="prod-img" placeholder="https://... (ou deixe vazio)"></div>
     <div class="form-row">
       <div class="form-group"><label>Preço de Custo (R$)</label><input type="number" id="prod-custo" placeholder="0,00" step="0.01" min="0"></div>
       <div class="form-group"><label>Preço de Venda (R$)</label><input type="number" id="prod-preco" placeholder="0,00" step="0.01" min="0"></div>
@@ -695,27 +979,36 @@ function openModal(id){
 function closeModal(id){document.getElementById(id).classList.remove('open');}
 
 // ─── FILTRO DASHBOARD ─────────────────────────────────────────────────────────
-function onFiltroChange(){
-  var tipo = document.getElementById('dash-filtro-tipo').value;
-  var show = tipo==='mes-ano';
-  document.getElementById('dash-filtro-mes').style.display = show?'':'none';
-  document.getElementById('dash-filtro-ano').style.display = show?'':'none';
-  if(show){
-    var agora=new Date();
-    popularAnos();
-    document.getElementById('dash-filtro-mes').value = agora.getMonth();
-    document.getElementById('dash-filtro-ano').value = agora.getFullYear();
-  }
-  renderDashboard();
-}
+
 function popularAnos(){
   var anos=new Set();
   anos.add(new Date().getFullYear());
   db.vendas.forEach(function(v){anos.add(new Date(v.data).getFullYear());});
   var sel=document.getElementById('dash-filtro-ano');
+
   var cur=sel.value;
-  sel.innerHTML=Array.from(anos).sort(function(a,b){return b-a;}).map(function(a){return '<option value="'+a+'"'+(a==cur?' selected':'')+'>'+a+'</option>';}).join('');
+  var opts = Array.from(anos).sort(function(a,b){return b-a;}).map(function(a){return '<option value="'+a+'"'+(a==cur?' selected':'')+'>'+a+'</option>';}).join('');
+  sel.innerHTML = opts;
 }
+
+function onFiltroChange(){
+  var tipo = document.getElementById('dash-filtro-tipo').value;
+  var enable = tipo==='mes-ano';
+
+  var selMes = document.getElementById('dash-filtro-mes');
+  var selAno = document.getElementById('dash-filtro-ano');
+  if(selMes){ selMes.disabled = !enable; selMes.style.opacity = enable ? '1' : '.55'; }
+  if(selAno){ selAno.disabled = !enable; selAno.style.opacity = enable ? '1' : '.55'; }
+
+  if(enable){
+    var agora=new Date();
+    popularAnos();
+    if(selMes && (selMes.value==='' || selMes.value==null)) selMes.value = agora.getMonth();
+    if(selAno && (selAno.value==='' || selAno.value==null)) selAno.value = agora.getFullYear();
+  }
+  renderDashboard();
+}
+
 function getFiltroRange(){
   var tipo=document.getElementById('dash-filtro-tipo').value;
   var now=new Date();
@@ -747,6 +1040,12 @@ function setupTabelaProdutosListeners(){
     if(isNaN(idx)) return;
     if(btn.classList.contains('js-editar')) editarProduto(idx);
     if(btn.classList.contains('js-compra')) abrirCompra(idx);
+    if(btn.classList.contains('js-baixa')) {
+      var q = prompt('Quantas unidades saíram do estoque (uso/perda)?');
+      if(q==null) return;
+      var obs = prompt('Observação (opcional):') || '';
+      baixarEstoqueUso(idx, q, new Date().toISOString(), obs);
+    }
     if(btn.classList.contains('js-excluir')) excluirProduto(idx);
   });
 }
@@ -756,6 +1055,7 @@ function salvarProduto(){
   var nome = document.getElementById('prod-nome').value.trim();
   var cat = document.getElementById('prod-cat').value.trim();
   var fornecedor = (document.getElementById('prod-fornecedor')||{}).value ? document.getElementById('prod-fornecedor').value.trim() : '';
+  var img = document.getElementById('prod-img') ? document.getElementById('prod-img').value.trim() : '';
   var estoqueBaixo = parseInt((document.getElementById('prod-estoque-baixo')||{}).value||'5',10);
   if(isNaN(estoqueBaixo) || estoqueBaixo<0) estoqueBaixo = 5;
   var dataCompra = (document.getElementById('prod-data-compra')||{}).value || '';
@@ -764,14 +1064,65 @@ function salvarProduto(){
   var estqInit = parseInt(document.getElementById('prod-estoque').value)||0;
   if(!nome){alert('Informe o nome do produto.');return;}
   if(idxStr!==''){
-    var idx=parseInt(idxStr);
-    db.produtos[idx].nome=nome; db.produtos[idx].categoria=cat;
-    db.produtos[idx].fornecedor=fornecedor;
-    db.produtos[idx].estoqueBaixo=estoqueBaixo;
-    db.produtos[idx].custo=custo; db.produtos[idx].preco=preco;
-    if(db.produtos[idx].excluido==null) db.produtos[idx].excluido=false;
+    var idx=parseInt(idxStr,10);
+var p=db.produtos[idx];
+if(!p) { alert('Produto inválido.'); return; }
+
+// valores antigos
+var oldEstoque = Number(p.estoque||0);
+
+// atualiza campos
+p.nome=nome; 
+p.categoria=cat;
+p.fornecedor=fornecedor;
+    p.img = img;
+p.estoqueBaixo=estoqueBaixo;
+p.custo=custo; 
+p.preco=preco;
+    p.img = img;
+if(p.excluido==null) p.excluido=false;
+
+// AJUSTE DE ESTOQUE (mantém histórico e FIFO coerentes)
+var novoEstoque = Number(estqInit||0);
+if(isNaN(novoEstoque) || novoEstoque<0) novoEstoque = 0;
+var diff = novoEstoque - oldEstoque;
+
+if(diff !== 0){
+  var isoAjuste = new Date().toISOString();
+  if(diff > 0){
+    // entrada (ajuste)
+    p.estoque = oldEstoque + diff;
+    db.movimentacoes.push({
+      data: isoAjuste,
+      produtoIdx: idx,
+      tipo: 'entrada',
+      qtd: diff,
+      qtdRestante: diff,
+      custoUnit: Number(custo||0),
+      fornecedor: (fornecedor||p.fornecedor||''),
+      obs: 'Ajuste de estoque (entrada)'
+    });
   } else {
-    db.produtos.push({nome:nome,categoria:cat,fornecedor:fornecedor,estoqueBaixo:estoqueBaixo,custo:custo,preco:preco,estoque:estqInit,excluido:false});
+    // saída (ajuste) - consome FIFO
+    var saida = Math.abs(diff);
+    if(saida > oldEstoque) saida = oldEstoque;
+    var fifoAdj = fifoConsumir(idx, saida, true); // consome qtdRestante
+    var custoTotalAdj = fifoAdj ? Number(fifoAdj.custoTotal||0) : 0;
+    var custoUnitAdj = fifoAdj ? Number(fifoAdj.custoMedio||0) : 0;
+    p.estoque = Math.max(0, oldEstoque - saida);
+    db.movimentacoes.push({
+      data: isoAjuste,
+      produtoIdx: idx,
+      tipo: 'saida',
+      qtd: saida,
+      custoUnit: custoUnitAdj,
+      custoTotal: custoTotalAdj,
+      obs: 'Ajuste de estoque (saída)'
+    });
+  }
+}
+} else {
+    db.produtos.push({nome:nome,categoria:cat,fornecedor:fornecedor,img:img,estoqueBaixo:estoqueBaixo,custo:custo,preco:preco,estoque:estqInit,excluido:false,img:img});
     if(estqInit>0){
       var iso = dataCompra ? (new Date(dataCompra+'T12:00:00')).toISOString() : new Date().toISOString();
       db.movimentacoes.push({data:iso,produtoIdx:db.produtos.length-1,tipo:'entrada',qtd:estqInit,qtdRestante:estqInit,custoUnit:custo,fornecedor:fornecedor,obs:'Estoque inicial'});
@@ -814,6 +1165,47 @@ function excluirProduto(idx){
   renderProdutosVenda(); renderDashboard(); renderRelatorios(); renderHistorico(); renderCompras();
 }
 
+function baixarEstoqueUso(idx, qtd, dataISO, obs){
+  var p = db.produtos[idx];
+  if(!p || p.excluido) return;
+
+  qtd = parseInt(qtd || '0', 10);
+  if(!qtd || qtd <= 0){ alert('Quantidade inválida.'); return; }
+  if(qtd > p.estoque){ alert('Estoque insuficiente.'); return; }
+
+  var iso = dataISO || new Date().toISOString();
+
+  // Consome FIFO (reduz qtdRestante das entradas) e captura custo
+  var fifo = fifoConsumir(idx, qtd, true);
+  var custoTotal = fifo ? Number(fifo.custoTotal||0) : 0;
+  var custoUnit = fifo ? Number(fifo.custoMedio||0) : 0;
+
+  // Baixa estoque
+  p.estoque -= qtd;
+
+  // Registra movimentação sem criar venda
+  db.movimentacoes.push({
+    data: iso,
+    produtoIdx: idx,
+    tipo: 'saida',
+    qtd: qtd,
+    custoUnit: custoUnit,
+    custoTotal: custoTotal,
+    obs: obs ? ('Uso/Perda: ' + obs) : 'Uso/Perda (sem venda)'
+  });
+
+  save();
+  renderProdutos();
+  renderProdutosVenda();
+  if(document.getElementById('venda-data')) document.getElementById('venda-data').value=(new Date()).toISOString().slice(0,10);
+  renderProdutosVenda();
+  renderDashboard();
+  renderRelatorios();
+  renderCompras();
+}
+
+
+
 function renderProdutos(){
   var busca=(document.getElementById('busca-produto')?document.getElementById('busca-produto').value:'').toLowerCase();
   var tbody=document.getElementById('tabela-produtos');
@@ -822,8 +1214,7 @@ function renderProdutos(){
   if(!indices.length){
     tbody.innerHTML='<tr><td colspan="7" style="text-align:center;color:var(--muted);padding:32px">Nenhum produto cadastrado.</td></tr>';
     setupTabelaProdutosListeners();
-    sbInit();
-return;
+    return;
   }
   var html='';
   indices.forEach(function(i){
@@ -838,6 +1229,7 @@ return;
       +'<td>'+st+'</td>'
       +'<td style="display:flex;gap:6px">'
       +'<button class="btn btn-sm btn-secondary js-editar">Editar</button>'
+      +'<button class="btn btn-sm btn-secondary js-baixa">Baixa</button>'
       +'<button class="btn-del js-excluir">Excluir</button>'
       +'</td></tr>';
   });
@@ -857,12 +1249,22 @@ function renderProdutosVenda(){
   var lista=db.produtos.filter(function(p){return p && !p.excluido && p.estoque>0 && p.nome.toLowerCase().indexOf(busca)>=0;});
   var div=document.getElementById('grade-produtos-venda');
   if(!lista.length){div.innerHTML='<p style="color:var(--muted);font-size:14px">Nenhum produto disponível em estoque.</p>';return;}
-  div.innerHTML=lista.map(function(p,i){
+
+  div.innerHTML=lista.map(function(p){
     var realIdx=db.produtos.indexOf(p);
-    return '<div class="prod-card" onclick="addCarrinho('+realIdx+')">'
-      +'<div class="prod-card-name">'+esc(p.nome)+'</div>'
-      +'<div class="prod-card-price">'+fmt(p.preco)+'</div>'
-      +'<div class="prod-card-stock">Estoque: '+p.estoque+'</div>'
+    var low = p.estoque<= (Number(p.estoqueBaixo||5));
+    var badge = low ? '<span class="prod-badge badge-low">Estoque baixo</span>' : '';
+    var img = (p.img||'').trim();
+    var media = img
+      ? '<img class="prod-img" src="'+esc(img)+'" alt="'+esc(p.nome)+'" onerror="this.outerHTML=\'<div class=&quot;prod-placeholder&quot;>'+esc(p.nome).slice(0,1).toUpperCase()+'</div>\'">'
+      : '<div class="prod-placeholder">'+esc(p.nome).slice(0,1).toUpperCase()+'</div>';
+
+    return '<div class="prod-card" data-idx="'+realIdx+'">'
+      +'<div class="prod-media">'+badge+media+'</div>'
+      +'<h3>'+esc(p.nome)+'</h3>'
+      +'<div class="prod-preco">'+fmt(p.preco)+'</div>'
+      +'<div class="prod-estoque">Estoque: '+p.estoque+'</div>'
+      +'<button class="btn btn-primary btn-vender" onclick="addCarrinho('+realIdx+');">Vender</button>'
       +'</div>';
   }).join('');
 }
@@ -955,10 +1357,19 @@ function switchHistoricoTab(tab){
   historicoTab = tab;
   document.getElementById('tab-hist-vendas').classList.toggle('active', tab==='vendas');
   document.getElementById('tab-hist-compras').classList.toggle('active', tab==='compras');
+  var tb = document.getElementById('tab-hist-baixas');
+  if(tb) tb.classList.toggle('active', tab==='baixas');
+
   document.getElementById('hist-vendas').style.display = tab==='vendas' ? '' : 'none';
   document.getElementById('hist-compras').style.display = tab==='compras' ? '' : 'none';
-  if(tab==='compras') renderCompras(); else renderHistorico();
+  var hb = document.getElementById('hist-baixas');
+  if(hb) hb.style.display = tab==='baixas' ? '' : 'none';
+
+  if(tab==='compras') renderCompras();
+  else if(tab==='baixas') renderBaixas();
+  else renderHistorico();
 }
+
 
 function renderCompras(){
   var tbody=document.getElementById('tabela-compras');
@@ -979,6 +1390,32 @@ function renderCompras(){
       +'<td>'+fmt(Number(m.custoUnit||0))+'</td>'
       +'<td>'+fmt(total)+'</td>'
       +'<td>'+esc(m.obs||'')+'</td>'
+      +'</tr>';
+  }).join('');
+}
+
+function renderBaixas(){
+  var tbody=document.getElementById('tabela-baixas');
+  if(!tbody) return;
+
+  var mov = (db.movimentacoes||[])
+    .filter(function(m){return m && m.tipo==='saida' && String(m.obs||'').indexOf('Uso/Perda')===0;})
+    .sort(function(a,b){return new Date(b.data)-new Date(a.data);});
+
+  if(!mov.length){
+    tbody.innerHTML='<tr><td colspan="4" style="text-align:center;color:var(--muted);padding:32px">Nenhuma baixa registrada.</td></tr>';
+    return;
+  }
+
+  tbody.innerHTML = mov.map(function(m){
+    var p=db.produtos[m.produtoIdx];
+    var nome = p && !p.excluido ? p.nome : ('(produto removido #' + m.produtoIdx + ')');
+    var motivo = String(m.obs||'').replace(/^Uso\/Perda:\s*/,'').replace(/^Uso\/Perda\s*\(sem venda\)/,'Uso/Perda');
+    return '<tr>'
+      +'<td>'+fmtData(m.data)+'</td>'
+      +'<td><strong>'+esc(nome)+'</strong></td>'
+      +'<td>'+Number(m.qtd||0)+'</td>'
+      +'<td>'+esc(motivo)+'</td>'
       +'</tr>';
   }).join('');
 }
@@ -1086,6 +1523,14 @@ function renderDashboard(){
   // Ao excluir um produto (p.excluido=true), ele sai automaticamente destes cálculos.
   var totalCompras=movEnt.reduce(function(s,m){var p=db.produtos[m.produtoIdx]; if(!p||p.excluido) return s; return s + (Number(m.custoUnit||0)*Number(m.qtd||0));},0);
 
+// Total baixas (uso/perda) no período — subtrai do investido
+var movSaidaUso = db.movimentacoes.filter(function(m){return m && m.tipo==='saida' && inRange(m.data) && String(m.obs||'').indexOf('Uso/Perda')===0;});
+var totalBaixas = movSaidaUso.reduce(function(s,m){
+  var p=db.produtos[m.produtoIdx]; if(!p||p.excluido) return s;
+  var ct = (m.custoTotal!=null) ? Number(m.custoTotal||0) : (Number(m.custoUnit||0)*Number(m.qtd||0));
+  return s + ct;
+},0);
+
   // custo do estoque atual: usa o último custo unitário de entrada conhecido por produto
   var lastCostByIdx={};
   db.movimentacoes.forEach(function(mm){
@@ -1100,7 +1545,17 @@ function renderDashboard(){
     var c=lastCostByIdx[x.idx]?Number(lastCostByIdx[x.idx].c||0):0;
     return s + (c*Number(x.p.estoque||0));
   },0);
-  var totalInv=totalCompras;
+
+// Estoque (visão atual)
+var valorEstoqueAtual = db.produtos
+  .map(function(p,idx){return {p:p,idx:idx};})
+  .filter(function(x){return x.p && !x.p.excluido;})
+  .reduce(function(s,x){ return s + (Number(x.p.preco||0) * Number(x.p.estoque||0)); }, 0);
+
+if(document.getElementById('dash-estoque-custo')) document.getElementById('dash-estoque-custo').textContent = fmt(custoEstoqueAtual);
+if(document.getElementById('dash-estoque-valor')) document.getElementById('dash-estoque-valor').textContent = fmt(valorEstoqueAtual);
+
+  var totalInv = totalCompras - totalBaixas;
   document.getElementById('dash-receita').textContent=fmt(vendas.filter(function(v){return v.pgto==='pago' || (v.pgto==='fiado' && v.fiadoPago);}).reduce(function(s,v){return s+v.total;},0));
   document.getElementById('dash-lucro').textContent=fmt(vendas.filter(function(v){return v.pgto==='pago' || (v.pgto==='fiado' && v.fiadoPago);}).reduce(function(s,v){return s+v.itens.reduce(function(ss,i){return ss+(i.preco-i.custo)*i.qtd;},0);},0));
   document.getElementById('dash-investido').textContent=fmt(totalInv);
@@ -1111,9 +1566,44 @@ function renderDashboard(){
   document.getElementById('dash-fiado-alerta').innerHTML=qtdFiado>0
     ?'<div class="alert-banner">⚠️ <span>Você tem <strong>'+qtdFiado+' venda(s)</strong> no fiado em aberto totalizando <strong>'+fmt(totalFiado)+'</strong>. <a href="#" onclick="goTo(\'fiado\');return false;" style="color:var(--accent);text-decoration:none;font-weight:600">Ver fiados →</a></span></div>'
     :'';
-  var labels=[],valores=[];
-  for(var i=6;i>=0;i--){var d=new Date();d.setDate(d.getDate()-i);labels.push(d.toLocaleDateString('pt-BR',{day:'numeric',month:'short'}));valores.push(vendas.filter(function(v){return new Date(v.data).toDateString()===d.toDateString();}).reduce(function(s,v){return s+v.total;},0));}
-  document.getElementById('chart-vendas-title').textContent=range?'Vendas por dia (período selecionado)':'Vendas dos últimos 7 dias';
+  
+
+
+// Gráfico mensal (por dia) — usa o mesmo PERÍODO selecionado acima
+var now2 = new Date();
+var tipoChart = document.getElementById('dash-filtro-tipo').value;
+
+var mesChart = now2.getMonth();
+var anoChart = now2.getFullYear();
+
+if(tipoChart==='mes-passado'){
+  var prev = new Date(now2.getFullYear(), now2.getMonth()-1, 1);
+  mesChart = prev.getMonth();
+  anoChart = prev.getFullYear();
+} else if(tipoChart==='mes-ano'){
+  var selMesP = document.getElementById('dash-filtro-mes');
+  var selAnoP = document.getElementById('dash-filtro-ano');
+  if(selMesP && selMesP.value!=='') mesChart = parseInt(selMesP.value,10);
+  if(selAnoP && selAnoP.value!=='') anoChart = parseInt(selAnoP.value,10);
+} // mes-atual e sempre: mês atual
+
+var startChart = new Date(anoChart, mesChart, 1, 0,0,0);
+
+var labels=[], valores=[];
+var lastDay = new Date(anoChart, mesChart+1, 0).getDate();
+for(var d=1; d<=lastDay; d++){
+  labels.push(String(d));
+  var dayStart = new Date(anoChart, mesChart, d, 0,0,0);
+  var dayEnd = new Date(anoChart, mesChart, d, 23,59,59);
+  var somaDia = db.vendas
+    .filter(function(v){ var dv=new Date(v.data); return dv>=dayStart && dv<=dayEnd; })
+    .reduce(function(s,v){ return s+v.total; }, 0);
+  valores.push(somaDia);
+}
+
+var monthName = startChart.toLocaleDateString('pt-BR',{month:'long',year:'numeric'});
+document.getElementById('chart-vendas-title').textContent='Vendas por dia — ' + monthName;
+
   if(chartVendasInst)chartVendasInst.destroy();
   chartVendasInst=new Chart(document.getElementById('chartVendas').getContext('2d'),{type:'line',data:{labels:labels,datasets:[{label:'Receita',data:valores,borderColor:'#c8f135',backgroundColor:'rgba(200,241,53,.1)',fill:true,tension:.4,pointBackgroundColor:'#c8f135'}]},options:{plugins:{legend:{display:false}},scales:{x:{grid:{color:'#2e2e2e'},ticks:{color:'#888',font:{size:11}}},y:{grid:{color:'#2e2e2e'},ticks:{color:'#888',font:{size:11},callback:function(v){return 'R$'+v;}}}},responsive:true}});
   var baixo=db.produtos.filter(function(p){return p && !p.excluido && Number(p.estoque||0) <= Number(p.estoqueBaixo||5);});
@@ -1124,28 +1614,64 @@ function renderDashboard(){
 
 // ─── RELATÓRIOS ───────────────────────────────────────────────────────────────
 var chartProdInst=null;
+
 function renderRelatorios(){
-    // Custo do Estoque: considera apenas produtos ativos (não excluídos) com estoque > 0
-  var estoqueCusto = db.produtos
-    .filter(function(p){ return p && !p.excluido && Number(p.estoque||0) > 0; })
-    .reduce(function(s,p){ return s + (Number(p.custo||0) * Number(p.estoque||0)); }, 0);
-  document.getElementById('rel-estoque-custo').textContent = fmt(estoqueCusto);
-  var valorEstoque = db.produtos
-    .filter(function(p){return p && !p.excluido;})
-    .reduce(function(s,p){return s + (Number(p.preco||0) * Number(p.estoque||0));},0);
-  document.getElementById('rel-ticket').textContent=fmt(valorEstoque);
-  var vendidos=db.vendas.reduce(function(arr,v){return arr.concat(v.itens);},[]);
-  var topMap={};vendidos.forEach(function(i){topMap[i.nome]=(topMap[i.nome]||0)+i.qtd;});
-  var top=Object.entries(topMap).sort(function(a,b){return b[1]-a[1];})[0];
-  document.getElementById('rel-top').textContent=top?top[0]+' ('+top[1]+'x)':'—';
-  var totalRec=db.vendas.reduce(function(s,v){return s+v.total;},0);
-  var totalCusto=db.vendas.reduce(function(s,v){return s+v.itens.reduce(function(ss,i){return ss+i.custo*i.qtd;},0);},0);
-  document.getElementById('rel-margem').textContent=totalRec>0?((totalRec-totalCusto)/totalRec*100).toFixed(1)+'%':'0%';
-  var recMap={},lucMap={};
-  vendidos.forEach(function(i){recMap[i.nome]=(recMap[i.nome]||0)+i.preco*i.qtd;lucMap[i.nome]=(lucMap[i.nome]||0)+(i.preco-i.custo)*i.qtd;});
-  var prods=Object.keys(recMap);
-  if(chartProdInst)chartProdInst.destroy();
-  chartProdInst=new Chart(document.getElementById('chartProdutos').getContext('2d'),{type:'bar',data:{labels:prods.length?prods:['—'],datasets:[{label:'Receita',data:prods.length?prods.map(function(p){return recMap[p];}):[0],backgroundColor:'rgba(200,241,53,.7)'},{label:'Lucro',data:prods.length?prods.map(function(p){return lucMap[p];}):[0],backgroundColor:'rgba(74,222,128,.7)'}]},options:{plugins:{legend:{labels:{color:'#888'}}},scales:{x:{grid:{color:'#2e2e2e'},ticks:{color:'#888'}},y:{grid:{color:'#2e2e2e'},ticks:{color:'#888',callback:function(v){return 'R$'+v;}}}},responsive:true}});
+  // Relatórios (visão geral) — baseado em TODAS as vendas
+  var vendidos = db.vendas.reduce(function(arr,v){ return arr.concat(v.itens||[]); }, []);
+
+  // Produto mais vendido (qtd)
+  var qtdPorProd = {};
+  vendidos.forEach(function(i){
+    if(!i || !i.nome) return;
+    qtdPorProd[i.nome] = (qtdPorProd[i.nome]||0) + Number(i.qtd||0);
+  });
+  var topVend = Object.entries(qtdPorProd).sort(function(a,b){ return b[1]-a[1]; })[0];
+
+  var el1 = document.getElementById('rel-prod-mais-vendido');
+  if(el1) el1.textContent = topVend ? (topVend[0] + ' (' + topVend[1] + ' un.)') : '—';
+
+  // Produto com mais lucro (lucro total)
+  var lucroPorProd = {};
+  vendidos.forEach(function(i){
+    if(!i || !i.nome) return;
+    var lucro = (Number(i.preco||0) - Number(i.custo||0)) * Number(i.qtd||0);
+    lucroPorProd[i.nome] = (lucroPorProd[i.nome]||0) + lucro;
+  });
+  var topLuc = Object.entries(lucroPorProd).sort(function(a,b){ return b[1]-a[1]; })[0];
+
+  var el2 = document.getElementById('rel-prod-mais-lucro');
+  var el2v = document.getElementById('rel-prod-mais-lucro-val');
+  if(el2) el2.textContent = topLuc ? topLuc[0] : '—';
+  if(el2v) el2v.textContent = topLuc ? fmt(topLuc[1]) : fmt(0);
+
+  // Cliente que comprou mais itens (qtd total)
+  var itensPorCliente = {};
+  db.vendas.forEach(function(v){
+    var cli = (v.cliente||'').trim();
+    if(!cli) return;
+    var qtd = (v.itens||[]).reduce(function(s,i){ return s + Number(i.qtd||0); }, 0);
+    itensPorCliente[cli] = (itensPorCliente[cli]||0) + qtd;
+  });
+  var topCliItens = Object.entries(itensPorCliente).sort(function(a,b){ return b[1]-a[1]; })[0];
+
+  var el3 = document.getElementById('rel-cliente-mais-itens');
+  var el3q = document.getElementById('rel-cliente-mais-itens-qtd');
+  if(el3) el3.textContent = topCliItens ? topCliItens[0] : '—';
+  if(el3q) el3q.textContent = topCliItens ? (topCliItens[1] + ' itens') : '0 itens';
+
+  // Cliente que mais gastou (valor total)
+  var gastoPorCliente = {};
+  db.vendas.forEach(function(v){
+    var cli = (v.cliente||'').trim();
+    if(!cli) return;
+    gastoPorCliente[cli] = (gastoPorCliente[cli]||0) + Number(v.total||0);
+  });
+  var topCliGasto = Object.entries(gastoPorCliente).sort(function(a,b){ return b[1]-a[1]; })[0];
+
+  var el4 = document.getElementById('rel-cliente-mais-gastou');
+  var el4v = document.getElementById('rel-cliente-mais-gastou-val');
+  if(el4) el4.textContent = topCliGasto ? topCliGasto[0] : '—';
+  if(el4v) el4v.textContent = topCliGasto ? fmt(topCliGasto[1]) : fmt(0);
 }
 
 // ─── UTILS ────────────────────────────────────────────────────────────────────
@@ -1307,7 +1833,7 @@ function sbStartAutoPull(){
   // a cada 20s tenta puxar atualizações (leve)
   window.__SB.autoPullTimer = setInterval(function(){
     sbAutoPullTick();
-  }, 20000);
+  }, 5000);
 }
 
 function sbStopAutoPull(){
@@ -1341,11 +1867,12 @@ function sbInit(){
         window.__SB.userId = sess.user.id;
         window.__SB.email = sess.user.email || null;
         sbSetStatus(window.__SB.email || ('uid ' + window.__SB.userId.slice(0,6)));
-        sbSyncPull(false, true);
-        sbStartAutoPull();
-        // ao logar: puxar automaticamente
-        sbSyncPull(false, true);
-        sbStartAutoPull();
+
+// ao iniciar com sessão existente: puxa 1x e libera push após concluir
+sbSyncPull(false, true).then(function(ok){
+  if(ok && window.__SYNC_GUARD) window.__SYNC_GUARD.pulledAfterLogin = true;
+});
+sbStartAutoPull();
       }else{
         sbSetStatus('desconectado');
         sbStopAutoPull();
@@ -1358,9 +1885,12 @@ function sbInit(){
         window.__SB.userId = session.user.id;
         window.__SB.email = session.user.email || null;
         sbSetStatus(window.__SB.email || ('uid ' + window.__SB.userId.slice(0,6)));
-        // ao logar: puxar automaticamente
-        sbSyncPull(false, true);
-        sbStartAutoPull();
+
+// ao logar: puxar automaticamente e liberar push após concluir
+sbSyncPull(false, true).then(function(ok){
+  if(ok && window.__SYNC_GUARD) window.__SYNC_GUARD.pulledAfterLogin = true;
+});
+sbStartAutoPull();
       }else{
         window.__SB.userId = null;
         window.__SB.email = null;
@@ -1455,27 +1985,49 @@ async function sbSyncPull(showAlerts=true, silent=false){
         return false;
       }
     }
-    // Conflito: se o local é mais recente que o online, não sobrescreve automaticamente
-    var localTs = 0;
-    try{ localTs = db && db._updatedAt ? Date.parse(db._updatedAt) : 0; }catch(e){}
-    if(localTs && remoteUpdated && localTs > remoteUpdated){
-      if(showAlerts){
-        if(!confirm('Seu banco local parece mais recente que o online. Deseja substituir o local pelo online mesmo assim?')){
-          return false;
-        }
-      }else{
-        // modo automático: preserva o local
-        return false;
-      }
+    
+// Conflito: se o local é mais recente que o online, não sobrescreve automaticamente
+// Observação: relógio do dispositivo pode estar adiantado. Tolerância: 10 minutos.
+var localTs = 0;
+try{ localTs = db && db._updatedAt ? Date.parse(db._updatedAt) : 0; }catch(e){}
+var localEmpty = true;
+try{
+  localEmpty = (!db || !Array.isArray(db.produtos) || db.produtos.length===0) &&
+               (!db || !Array.isArray(db.vendas) || db.vendas.length===0) &&
+               (!db || !Array.isArray(db.movimentacoes) || db.movimentacoes.length===0);
+}catch(e){ localEmpty = true; }
+
+var skew = (localTs && remoteUpdated) ? (localTs - remoteUpdated) : 0;
+var allowSkew = 10 * 60 * 1000; // 10 min
+
+if(localTs && remoteUpdated && localTs > remoteUpdated && !localEmpty && skew > allowSkew){
+  if(showAlerts){
+    if(!confirm('Seu banco local parece mais recente que o online. Deseja substituir o local pelo online mesmo assim?')){
+      return false;
     }
+  }else{
+    // modo automático: preserva o local (evita perda)
+    return false;
+  }
+}
+db = novo;
+localStorage.setItem('mrevenda', JSON.stringify(db));
 
+// marcou como sincronizado neste login (libera push)
+if(window.__SYNC_GUARD) window.__SYNC_GUARD.pulledAfterLogin = true;
 
-    db = novo;
-    localStorage.setItem('mrevenda', JSON.stringify(db));
-    atualizarBadgeFiado();
-    renderDashboard();
-    if(showAlerts && !silent) alert('Dados carregados do online.');
-    return true;
+// re-render geral (evita "puxou mas não apareceu")
+atualizarBadgeFiado();
+renderDashboard();
+try{ renderProdutos(); }catch(e){}
+try{ renderProdutosVenda(); }catch(e){}
+try{ renderHistorico(); }catch(e){}
+try{ renderCompras(); }catch(e){}
+try{ renderRelatorios(); }catch(e){}
+try{ renderFiado(); }catch(e){}
+try{ atualizarCarrinho(); }catch(e){}
+if(showAlerts && !silent) alert('Dados carregados do online.');
+return true;
   }catch(e){
     console.error(e);
     if(showAlerts) alert('Falha ao puxar do online: ' + (e && e.message ? e.message : e));
@@ -1492,7 +2044,30 @@ async function sbSyncPush(showAlerts=true){
       return false;
     }
 
-    var payload = {
+    
+// REMOTE MORE NEW GUARD: evita sobrescrever o online com dados locais desatualizados
+try{
+  var chk = await window.__SB.client
+    .from('revenda_db')
+    .select('updated_at')
+    .eq('user_id', window.__SB.userId)
+    .maybeSingle();
+  if(chk && chk.data && chk.data.updated_at){
+    var remoteTs = Date.parse(chk.data.updated_at) || 0;
+    var localTs2 = 0;
+    try{ localTs2 = db && db._updatedAt ? Date.parse(db._updatedAt) : 0; }catch(e){}
+    if(remoteTs && localTs2 && remoteTs > localTs2){
+      if(showAlerts){
+        alert('O online está mais recente que este dispositivo. Faça "Puxar do online" antes de enviar para evitar perder dados.');
+      }
+      return false;
+    }
+  }
+}catch(e){
+  // se falhar a checagem, continua (melhor não bloquear por erro de rede)
+}
+
+var payload = {
       user_id: window.__SB.userId,
       db: db,
       updated_at: (db && db._updatedAt) ? db._updatedAt : new Date().toISOString()
@@ -1523,14 +2098,25 @@ window.sbSyncPush = sbSyncPush;
 
 
 // ─── INIT ─────────────────────────────────────────────────────────────────────
+
 atualizarBadgeFiado();
+
+// inicializa Supabase (para auto sync funcionar sem cliques)
+sbInit();
+// dashboard: defaults
+try{
+  var n=new Date();
+  if(document.getElementById('dash-filtro-tipo')) document.getElementById('dash-filtro-tipo').value='mes-atual';
+  if(document.getElementById('dash-filtro-mes')) document.getElementById('dash-filtro-mes').disabled=true;
+  if(document.getElementById('dash-filtro-ano')) document.getElementById('dash-filtro-ano').disabled=true;
+  }catch(e){}
 renderDashboard();
 setupTabelaProdutosListeners();
 </script>
 <script>
   if ("serviceWorker" in navigator) {
     window.addEventListener("load", () => {
-      navigator.serviceWorker.register("./service-worker.js");
+      navigator.serviceWorker.register('./service-worker-v4.js');
     });
   }
 </script>
