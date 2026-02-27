@@ -730,6 +730,129 @@ label{
   #page-relatorios .rel-metric .m-value{ font-size: 24px; }
 }
 
+
+/* ─── FIX ESPAÇAMENTO IMPORTAR / EXPORTAR ───────────────────────────── */
+#page-dados{
+  padding-top: 12px !important;
+}
+#page-dados .page-header{
+  margin-bottom: 16px !important;
+}
+#page-dados .card{
+  margin-top: 0 !important;
+}
+#page-dados .dados-grid{
+  margin-top: 16px !important;
+}
+
+
+/* ─── CORREÇÃO DEFINITIVA ESPAÇO IMPORTAR / EXPORTAR ─────────────────── */
+#page-dados{
+  min-height: auto !important;
+  height: auto !important;
+  padding-top: 8px !important;
+  margin-top: 0 !important;
+}
+#page-dados > *:first-child{
+  margin-top: 0 !important;
+}
+#page-dados .page-header{
+  margin-top: 0 !important;
+  padding-top: 0 !important;
+}
+
+
+/* ─── FIX DEFINITIVO ALINHAMENTO IMPORTAR / EXPORTAR ─────────────────── */
+.main{
+  align-items: flex-start !important;
+}
+#page-dados{
+  display: block !important;
+}
+#page-dados.active{
+  display: block !important;
+}
+
+
+/* ──────────────────────────────────────────────────────────────────────────
+   IMPORTAR / EXPORTAR (layout novo)
+────────────────────────────────────────────────────────────────────────── */
+#page-dados{ display:none; }
+#page-dados.active{ display:block; }
+
+#page-dados .dados-shell{ max-width: 1200px; margin: 0 auto; }
+
+#page-dados .dados-head{
+  display:flex;
+  justify-content:space-between;
+  align-items:flex-end;
+  gap:14px;
+  margin-bottom: 16px;
+  flex-wrap: wrap;
+}
+
+#page-dados .dados-title{
+  font-family:'DM Serif Display',serif;
+  font-size: 30px;
+  line-height: 1.05;
+}
+#page-dados .dados-sub{
+  margin-top: 6px;
+  color: var(--muted);
+  font-size: 13px;
+  font-weight: 650;
+}
+
+#page-dados .dados-hint{
+  padding: 10px 12px;
+  border-radius: 14px;
+  border: 1px solid rgba(255,255,255,.10);
+  background: rgba(255,255,255,.03);
+  color: rgba(255,255,255,.80);
+  font-size: 12px;
+  font-weight: 750;
+}
+
+#page-dados .dados-section .card,
+#page-dados .dados-grid2 .card{
+  border-radius: 16px;
+  border: 1px solid rgba(255,255,255,.10);
+  background:
+    radial-gradient(900px 260px at 10% 0%, rgba(255,255,255,.06), rgba(0,0,0,0)),
+    linear-gradient(180deg, rgba(255,255,255,.04), rgba(255,255,255,.02));
+  box-shadow: 0 16px 32px rgba(0,0,0,.45);
+}
+
+#page-dados .dados-grid2{
+  display:grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+  margin-top: 14px;
+}
+
+#page-dados .dados-col{ min-width: 0; }
+
+#page-dados .card .form-row{ margin-top: 6px; }
+#page-dados .card button.btn{ border-radius: 12px; }
+#page-dados .card .btn.btn-primary{ box-shadow: 0 10px 18px rgba(0,0,0,.35); }
+
+#page-dados .card.card-danger{
+  background:
+    radial-gradient(900px 260px at 10% 0%, rgba(239,68,68,.14), rgba(0,0,0,0)),
+    linear-gradient(180deg, rgba(255,255,255,.03), rgba(255,255,255,.01));
+  border: 1px solid rgba(239,68,68,.35);
+}
+
+@media (max-width: 980px){
+  #page-dados .dados-grid2{ grid-template-columns: 1fr; }
+  #page-dados .dados-title{ font-size: 26px; }
+}
+
+
+/* ─── CORREÇÃO: page-dados não deve aparecer em outras abas ───────────── */
+#page-dados{ display:none !important; }
+#page-dados.active{ display:block !important; }
+
 </style>
 <link rel="manifest" href="./manifest.json">
 <meta name="theme-color" content="#0b0b0c">
@@ -952,14 +1075,16 @@ label{
 
     <!-- KPIs -->
     <div class="rel-kpis">
-      <div class="rel-kpi-card">
-        <div class="kpi-label">Receita total</div>
-        <div class="kpi-value" id="rel-receita-total">R$ 0,00</div>
+            <div class="rel-kpi-card">
+        <div class="kpi-label">Cliente que mais comprou</div>
+        <div class="kpi-value" id="rel-cliente-mais-comprou">—</div>
+        <div class="kpi-sub" id="rel-cliente-mais-comprou-val">0 un</div>
       </div>
 
       <div class="rel-kpi-card">
-        <div class="kpi-label">Lucro total</div>
-        <div class="kpi-value" id="rel-lucro-total">R$ 0,00</div>
+        <div class="kpi-label">Cliente que mais gastou</div>
+        <div class="kpi-value" id="rel-cliente-mais-gastou">—</div>
+        <div class="kpi-sub" id="rel-cliente-mais-gastou-val">R$ 0,00</div>
       </div>
 
       <div class="rel-kpi-card">
@@ -969,9 +1094,8 @@ label{
       </div>
 
       <div class="rel-kpi-card">
-        <div class="kpi-label">Cliente que mais gastou</div>
-        <div class="kpi-value" id="rel-cliente-mais-gastou">—</div>
-        <div class="kpi-sub" id="rel-cliente-mais-gastou-val">R$ 0,00</div>
+        <div class="kpi-label">Receita total</div>
+        <div class="kpi-value" id="rel-receita-total">R$ 0,00</div>
       </div>
     </div>
 
@@ -1036,10 +1160,17 @@ label{
 
 <!-- DADOS -->
   <div id="page-dados" class="page">
-    <div class="page-header">
-      <div class="page-title">Importar / Exportar <small>Backup e manutenção do banco local</small></div>
-    
-    <div class="card" style="margin-bottom:16px">
+  <div class="dados-shell">
+    <div class="dados-head">
+      <div>
+        <div class="dados-title">Importar / Exportar</div>
+        <div class="dados-sub">Backup e manutenção do banco local</div>
+      </div>
+      <div class="dados-hint">Dica: exporte antes de importar ou limpar.</div>
+    </div>
+
+    <div class="dados-section">
+<div class="card" style="margin-bottom:16px">
       <div style="font-size:17px;font-weight:900;margin-bottom:8px">Conta (Supabase)</div>
       <div style="color:var(--muted);font-size:13px;line-height:1.45;margin-bottom:12px">
         Faça login para sincronizar automaticamente entre dispositivos.
@@ -1068,11 +1199,11 @@ label{
         Status: <span id="sb-status">desconectado</span>
       </div>
     </div>
+    </div>
 
-</div>
-
-    <div class="dados-grid">
-      <div class="card">
+    <div class="dados-grid2">
+      <div class="dados-col">
+<div class="card">
         <div style="font-size:17px;font-weight:800;margin-bottom:8px">Exportar dados</div>
         <div style="color:var(--muted);font-size:13px;line-height:1.45;margin-bottom:14px">
           Gera um arquivo <strong>.json</strong> com Produtos, Vendas e Movimentações (localStorage).
@@ -1081,8 +1212,9 @@ label{
           <button class="btn btn-primary" onclick="exportarDados()">⬇️ Exportar JSON</button>
         </div>
       </div>
-
-      <div class="card">
+      </div>
+      <div class="dados-col">
+<div class="card">
         <div style="font-size:17px;font-weight:800;margin-bottom:8px">Importar dados</div>
         <div style="color:var(--muted);font-size:13px;line-height:1.45;margin-bottom:14px">
           Selecione um arquivo <strong>.json</strong> exportado aqui. Isso vai <strong>substituir</strong> o banco atual.
@@ -1093,9 +1225,11 @@ label{
           <button class="btn btn-secondary" onclick="baixarModeloVazio()">📄 Modelo vazio</button>
         </div>
       </div>
+      </div>
     </div>
 
-    <div class="card" style="margin-top:16px;border-color:rgba(255,92,92,.35)">
+    <div class="dados-section">
+<div class="card" style="margin-top:16px;border-color:rgba(255,92,92,.35)">
       <div style="font-size:17px;font-weight:900;margin-bottom:8px;color:var(--danger)">Zona de risco</div>
       <div style="color:var(--muted);font-size:13px;line-height:1.45;margin-bottom:14px">
         Remove <strong>todo</strong> o banco local (produtos, vendas, fiado e movimentações). Esta ação não tem desfazer.
@@ -1104,7 +1238,11 @@ label{
         <button class="btn-del" onclick="limparBanco()">🗑️ Limpar banco de dados</button>
       </div>
     </div>
+    </div>
+
+    <div style="height:10px"></div>
   </div>
+</div>
 
 </div>
 
@@ -1303,7 +1441,37 @@ function goTo(pg){
   document.getElementById('page-'+pg).classList.add('active');
   var nav = document.getElementById('nav-'+pg);
   if(nav) nav.classList.add('active');
-  var fns = {dashboard:renderDashboard,produtos:renderProdutos,vendas:function(){if(document.getElementById('venda-data')) document.getElementById('venda-data').value=(new Date()).toISOString().slice(0,10);
+
+
+  
+
+  // volta o scroll para o topo ao trocar de aba (documento e container)
+  (function(){
+    try{
+      var se = document.scrollingElement || document.documentElement;
+      if(se) se.scrollTop = 0;
+      document.documentElement.scrollTop = 0;
+      document.body.scrollTop = 0;
+      window.scrollTo(0,0);
+    }catch(e){}
+    try{
+      var main = document.querySelector('.main');
+      if(main) main.scrollTop = 0;
+    }catch(e){}
+    // reforço depois que o DOM aplicar a troca de .active
+    setTimeout(function(){
+      try{
+        var se = document.scrollingElement || document.documentElement;
+        if(se) se.scrollTop = 0;
+        window.scrollTo(0,0);
+      }catch(e){}
+      try{
+        var main = document.querySelector('.main');
+        if(main) main.scrollTop = 0;
+      }catch(e){}
+    }, 0);
+  })();
+var fns = {dashboard:renderDashboard,produtos:renderProdutos,vendas:function(){if(document.getElementById('venda-data')) document.getElementById('venda-data').value=(new Date()).toISOString().slice(0,10);
   renderProdutosVenda();renderCarrinho();},fiado:renderFiado,historico:renderHistorico,relatorios:renderRelatorios,dados:renderDados};
   if(fns[pg]) fns[pg]();
 }
