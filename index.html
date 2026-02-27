@@ -460,6 +460,158 @@ label{
 /* Debug panel inside Importar/Exportar */
 #sb-debug{ margin-top:14px; padding:12px; border-radius:14px; border:1px dashed rgba(255,255,255,.14); display:none; }
 #sb-debug pre{ white-space:pre-wrap; font-size:11px; color:rgba(255,255,255,.78); margin:10px 0 0; max-height:180px; overflow:auto; }
+
+
+/* ─── RELATÓRIO DIÁRIO (desktop overhaul, mobile mantém empilhado) ─────── */
+.rel-dia-top{
+  display:flex;
+  gap:18px;
+  align-items:flex-end;
+  justify-content:space-between;
+  flex-wrap:wrap;
+}
+.rel-dia-head .card-label{ font-size:14px; font-weight:900; letter-spacing:.8px; }
+.rel-dia-sub{ color:var(--muted); font-size:12px; margin-top:6px; max-width:720px; }
+.rel-dia-filtros{ display:flex; gap:12px; flex-wrap:wrap; align-items:flex-end; }
+.rel-filtro-lbl{ font-size:11px; color:var(--muted); margin-bottom:6px; }
+.rel-filtro select{ min-width:110px; }
+
+.rel-kpis{
+  display:grid;
+  grid-template-columns: 1.4fr 1fr 1fr;
+  gap:14px;
+  margin-top:16px;
+}
+.rel-kpi{
+  border:1px solid var(--border);
+  border-radius:18px;
+  padding:16px 16px;
+  background: rgba(255,255,255,.02);
+}
+.rel-kpi-lbl{
+  font-size:11px;
+  color:var(--muted);
+  letter-spacing:.6px;
+  font-weight:800;
+}
+.rel-kpi-val{
+  margin-top:10px;
+  font-size:34px;
+  font-weight:900;
+  letter-spacing:.2px;
+}
+.rel-kpi.small .rel-kpi-val{ font-size:24px; font-weight:900; }
+.rel-kpi-sub{ margin-top:8px; font-size:12px; color:var(--muted); }
+
+#rel-total-pago-big{
+  font-size:40px;
+  line-height:1.05;
+}
+
+.rel-grids{
+  display:grid;
+  grid-template-columns: 1fr 1fr;
+  gap:14px;
+  margin-top:14px;
+}
+.rel-box{
+  border:1px solid var(--border);
+  border-radius:18px;
+  padding:14px;
+  background: rgba(255,255,255,.01);
+}
+.rel-box-title{ font-weight:900; font-size:14px; letter-spacing:.4px; }
+.rel-box-sub{ color:var(--muted); font-size:12px; margin-top:6px; }
+.rel-table-wrap{
+  margin-top:12px;
+  overflow:auto;
+  border-radius:14px;
+  border:1px solid var(--border);
+}
+
+/* Mobile: mantém bom (empilhado) */
+@media (max-width: 899px){
+  .rel-kpis{ grid-template-columns: 1fr; }
+  .rel-grids{ grid-template-columns: 1fr; }
+  #rel-total-pago-big{ font-size:34px; }
+}
+
+
+/* ─── RELATÓRIO DIÁRIO: agrupamento + correção visual dos filtros ─────── */
+#rel-tabela-dia{ padding:0 !important; overflow:hidden; }
+#rel-tabela-dia .rel-daily-wrap{
+  padding:18px;
+  background: rgba(255,255,255,.06);
+}
+#rel-tabela-dia .rel-dia-top{
+  padding-bottom:14px;
+  border-bottom:1px solid var(--border);
+  margin-bottom:14px;
+}
+#rel-tabela-dia .rel-kpis{
+  margin-top:0;
+}
+#rel-tabela-dia .rel-grids{
+  margin-top:14px;
+}
+#rel-tabela-dia .rel-box{ background: rgba(0,0,0,.12); }
+
+/* selects: melhora legibilidade do dropdown (principalmente mobile) */
+#rel-tabela-dia select{
+  color-scheme: dark;
+  background: rgba(255,255,255,.04);
+  color: #fff;
+  border: 1px solid var(--border);
+}
+#rel-tabela-dia select:focus{
+  outline:none;
+  border-color: rgba(59,130,246,.55);
+  box-shadow: 0 0 0 3px rgba(59,130,246,.18);
+}
+#rel-tabela-dia option{
+  background: #0b0b0f;
+  color: #fff;
+}
+
+
+/* ─── RELATÓRIOS: melhorar leitura no desktop ─────────────────────────── */
+#page-relatorios .cards-grid{
+  margin-top:14px;
+}
+#page-relatorios .cards-grid .card{
+  background: rgba(255,255,255,.035);
+  border: 1px solid rgba(255,255,255,.10);
+  box-shadow: 0 18px 38px rgba(0,0,0,.35);
+}
+#page-relatorios .cards-grid .card .card-label{
+  font-size:12px;
+  letter-spacing:.7px;
+}
+#page-relatorios .cards-grid .card b{
+  font-size:22px;
+}
+#page-relatorios .cards-grid .card small{
+  color: var(--muted);
+}
+
+/* Relatório diário: bem diferente do resto */
+#rel-tabela-dia{
+  border: 1px solid rgba(255,255,255,.14) !important;
+  box-shadow: 0 26px 56px rgba(0,0,0,.55) !important;
+}
+#rel-tabela-dia .rel-daily-wrap{
+  background: rgba(160,160,160,.14) !important;
+}
+#rel-tabela-dia .rel-dia-top{
+  border-bottom: 1px solid rgba(255,255,255,.14) !important;
+}
+#rel-tabela-dia .rel-box{
+  background: rgba(0,0,0,.18) !important;
+}
+#rel-tabela-dia .rel-kpi{
+  background: rgba(0,0,0,.16) !important;
+  border: 1px solid rgba(255,255,255,.12) !important;
+}
 </style>
 <link rel="manifest" href="./manifest.json">
 <meta name="theme-color" content="#0b0b0c">
@@ -568,8 +720,7 @@ label{
     </div>
   </div>
 
-  <!-- PRODUTOS -->
-  <div id="page-produtos" class="page">
+<div id="page-produtos" class="page">
     <div class="page-header">
       <div class="page-title">Produtos <small>Gerencie seu catálogo</small></div>
       <button class="btn btn-primary" onclick="openModal('modal-produto')">+ Novo Produto</button>
@@ -583,8 +734,7 @@ label{
     </div>
   </div>
 
-  <!-- NOVA VENDA -->
-  <div id="page-vendas" class="page">
+<div id="page-vendas" class="page">
     <div class="page-header"><div class="page-title">Nova Venda <small>Selecione os produtos</small></div></div>
     <div class="cart-area">
       <div>
@@ -620,8 +770,7 @@ label{
     </div>
   </div>
 
-  <!-- FIADO -->
-  <div id="page-fiado" class="page">
+<div id="page-fiado" class="page">
     <div class="page-header"><div class="page-title">Fiado <small>Controle de dívidas</small></div></div>
     <div class="tabs">
       <div class="tab active" id="tab-devendo" onclick="switchFiadoTab('devendo')">Devendo</div>
@@ -630,8 +779,7 @@ label{
     <div id="fiado-lista"></div>
   </div>
 
-  <!-- HISTÓRICO -->
-  <div id="page-historico" class="page">
+<div id="page-historico" class="page">
     <div class="page-header"><div class="page-title">Histórico</div></div>
     <div class="tabs">
       <div class="tab active" id="tab-hist-vendas" onclick="switchHistoricoTab('vendas')">Vendas</div>
@@ -669,10 +817,97 @@ label{
 
   </div>
 
-  <!-- RELATÓRIOS -->
-  <div id="page-relatorios" class="page">
+<div id="page-relatorios" class="page">
 
 <div class="page-header"><div class="page-title">Relatórios <small>Insights do negócio</small></div></div>
+
+<div class="card" id="rel-tabela-dia" style="margin-top:18px">
+  <div class="rel-daily-wrap">
+
+  <div class="rel-dia-top">
+    <div class="rel-dia-head">
+      <div class="card-label">RELATÓRIO DIÁRIO</div>
+      <div class="rel-dia-sub">Produtos vendidos no dia + pagamentos recebidos no dia (fiado só conta quando for marcado como pago).</div>
+    </div>
+
+    <div class="rel-dia-filtros">
+      <div class="rel-filtro">
+        <div class="rel-filtro-lbl">Dia</div>
+        <select id="rel-dia"></select>
+      </div>
+      <div class="rel-filtro">
+        <div class="rel-filtro-lbl">Mês</div>
+        <select id="rel-mes"></select>
+      </div>
+      <div class="rel-filtro">
+        <div class="rel-filtro-lbl">Ano</div>
+        <select id="rel-ano"></select>
+      </div>
+      <button class="btn btn-secondary" onclick="relSetHoje()">Hoje</button>
+      <button class="btn btn-primary" onclick="renderRelatorioDiario()">Aplicar</button>
+    </div>
+  </div>
+
+  <div class="rel-kpis">
+    <div class="rel-kpi">
+      <div class="rel-kpi-lbl">TOTAL PAGO NO DIA</div>
+      <div class="rel-kpi-val" id="rel-total-pago-big">R$ 0,00</div>
+      <div class="rel-kpi-sub" id="rel-kpi-pagos-qtd">0 pagamentos</div>
+    </div>
+    <div class="rel-kpi small">
+      <div class="rel-kpi-lbl">VENDAS NO DIA</div>
+      <div class="rel-kpi-val" id="rel-kpi-vendas">0</div>
+      <div class="rel-kpi-sub" id="rel-kpi-itens">0 itens</div>
+    </div>
+    <div class="rel-kpi small">
+      <div class="rel-kpi-lbl">DATA</div>
+      <div class="rel-kpi-val" id="rel-kpi-data">—</div>
+      <div class="rel-kpi-sub">Filtro ativo</div>
+    </div>
+  </div>
+
+  <div class="rel-grids">
+    <div class="rel-box">
+      <div class="rel-box-title">Produtos vendidos</div>
+      <div class="rel-box-sub">Saída de estoque no dia da venda (inclui pago e fiado).</div>
+      <div class="rel-table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Produto</th>
+              <th style="width:110px">Qtd</th>
+              <th style="width:160px">Valor</th>
+            </tr>
+          </thead>
+          <tbody id="rel-tbody-prod">
+            <tr><td colspan="3" style="color:var(--muted)">—</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="rel-box">
+      <div class="rel-box-title">Pagamentos recebidos</div>
+      <div class="rel-box-sub">Não conta fiado; fiado entra somente quando marcado como pago.</div>
+      <div class="rel-table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th style="width:120px">Tipo</th>
+              <th>Descrição</th>
+              <th style="width:160px">Valor</th>
+              <th style="width:180px">Obs</th>
+            </tr>
+          </thead>
+          <tbody id="rel-tbody-pay">
+            <tr><td colspan="4" style="color:var(--muted)">—</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+  </div>
+</div>
 
 <div class="cards-grid" style="margin-bottom:24px">
   <div class="card">
@@ -694,56 +929,6 @@ label{
     <div class="card-value" id="rel-cliente-mais-gastou" style="font-size:16px">—</div>
     <div style="color:var(--muted);font-size:12px;margin-top:6px" id="rel-cliente-mais-gastou-val">R$ 0,00</div>
   </div>
-
-
-<div class="card" id="rel-tabela-dia" style="margin-top:18px">
-  <div style="display:flex;align-items:flex-end;justify-content:space-between;gap:16px;flex-wrap:wrap">
-    <div>
-      <div class="card-label" style="margin-bottom:6px">RELATÓRIO DIÁRIO</div>
-      <div style="color:var(--muted);font-size:12px">Produtos vendidos no dia + pagamentos recebidos no dia (fiado só conta quando for marcado como pago).</div>
-    </div>
-    <div style="display:flex;gap:10px;flex-wrap:wrap;align-items:flex-end">
-      <div>
-        <div style="font-size:11px;color:var(--muted);margin-bottom:6px">Dia</div>
-        <select id="rel-dia" style="min-width:90px"></select>
-      </div>
-      <div>
-        <div style="font-size:11px;color:var(--muted);margin-bottom:6px">Mês</div>
-        <select id="rel-mes" style="min-width:140px"></select>
-      </div>
-      <div>
-        <div style="font-size:11px;color:var(--muted);margin-bottom:6px">Ano</div>
-        <select id="rel-ano" style="min-width:110px"></select>
-      </div>
-      <button class="btn btn-secondary" onclick="relSetHoje()">Hoje</button>
-      <button class="btn btn-primary" onclick="renderRelatorioDiario()">Aplicar</button>
-    </div>
-  </div>
-
-  <div style="display:flex;gap:18px;flex-wrap:wrap;margin-top:14px">
-    <div style="color:var(--muted);font-size:12px">Vendas do dia: <b id="rel-resumo-vendas">0</b></div>
-    <div style="color:var(--muted);font-size:12px">Pagamentos recebidos: <b id="rel-resumo-pagamentos">0</b></div>
-  </div>
-
-  <div style="margin-top:12px;overflow:auto;border-radius:14px;border:1px solid var(--border)">
-    <table>
-      <thead>
-        <tr>
-          <th style="width:120px">Tipo</th>
-          <th>Descrição</th>
-          <th style="width:110px">Qtd</th>
-          <th style="width:160px">Valor</th>
-          <th style="width:160px">Obs/Data</th>
-        </tr>
-      </thead>
-      <tbody id="rel-tbody">
-        <tr><td colspan="5" style="color:var(--muted)">—</td></tr>
-      </tbody>
-    </table>
-  </div>
-</div>
-
-</div>
 </div>
 </div>
 
@@ -752,7 +937,9 @@ label{
     <div class="page-header">
       <div class="page-title">Importar / Exportar <small>Backup e manutenção do banco local</small></div>
     
-    <div class="card" style="margin-bottom:16px">
+    
+    </div>
+<div class="card" style="margin-bottom:16px">
       <div style="font-size:17px;font-weight:900;margin-bottom:8px">Conta (Supabase)</div>
       <div style="color:var(--muted);font-size:13px;line-height:1.45;margin-bottom:12px">
         Faça login para sincronizar automaticamente entre dispositivos.
@@ -791,7 +978,6 @@ label{
       </div>
     </div>
 
-</div>
 
     <div class="dados-grid">
       <div class="card">
@@ -830,9 +1016,10 @@ label{
 
 </div>
 
-    
 
-<!-- Modal Produto -->
+<!-- END PAGE DADOS -->
+</div>
+
 <div class="modal-bg" id="modal-produto">
   <div class="modal">
     <div class="modal-title" id="modal-prod-title">Novo Produto</div>
@@ -899,7 +1086,7 @@ label{
 </div>
 
 
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.0/chart.umd.min.js"></script>
 <script>
 // ─── DADOS ────────────────────────────────────────────────────────────────────
@@ -1868,10 +2055,12 @@ function sameDay(isoA, isoB){
 function renderRelatorioDiario(){
   relInitFiltros();
   var isoRef = relSelectedDateISO();
+  var refDate = new Date(isoRef);
 
   // 1) Produtos vendidos no dia (inclui pago + fiado, pois a saída de estoque ocorreu no dia da venda)
   var prodAgg = {}; // key -> {nome,qtd,valor}
   var vendasNoDia = 0;
+  var itensNoDia = 0;
 
   db.vendas.forEach(function(v){
     if(!v || !v.data) return;
@@ -1882,8 +2071,11 @@ function renderRelatorioDiario(){
       var key = (i.idx!=null ? ('#'+i.idx) : (i.nome||''));
       if(!key) return;
       if(!prodAgg[key]) prodAgg[key] = {nome:i.nome||('Produto '+key), qtd:0, valor:0};
-      prodAgg[key].qtd += Number(i.qtd||0);
-      prodAgg[key].valor += Number(i.preco||0) * Number(i.qtd||0);
+      var q = Number(i.qtd||0);
+      var p = Number(i.preco||0);
+      prodAgg[key].qtd += q;
+      prodAgg[key].valor += p * q;
+      itensNoDia += q;
     });
   });
 
@@ -1908,7 +2100,6 @@ function renderRelatorioDiario(){
     pagamentos.push({
       tipo: isPago ? 'Pagamento' : 'Fiado pago',
       desc: (v.cliente||'Cliente') + ' — ' + (isPago ? 'Venda paga' : 'Quitação fiado'),
-      qtd: '',
       valor: Number(v.total||0),
       obs: isPago ? '' : (v.fiadoPagoObs||'')
     });
@@ -1917,54 +2108,51 @@ function renderRelatorioDiario(){
 
   pagamentos.sort(function(a,b){ return b.valor - a.valor; });
 
-  // montar tabela única: produtos + separador + pagamentos
-  var tbody = document.getElementById('rel-tbody');
-  if(!tbody) return;
-
-  var rows = [];
-
-  // header produtos
-  rows.push('<tr><td colspan="5" style="font-weight:800">Produtos vendidos no dia</td></tr>');
-  if(!produtos.length){
-    rows.push('<tr><td colspan="5" style="color:var(--muted)">Nenhum produto vendido neste dia.</td></tr>');
-  }else{
-    produtos.forEach(function(p){
-      rows.push('<tr>'
-        +'<td><span class="badge badge-ok">Produto</span></td>'
-        +'<td>'+esc(p.nome)+'</td>'
-        +'<td>'+p.qtd+'</td>'
-        +'<td>'+fmt(p.valor)+'</td>'
-        +'<td style="color:var(--muted)">'+(new Date(isoRef).toLocaleDateString('pt-BR'))+'</td>'
-        +'</tr>');
-    });
+  // preencher produtos
+  var tbProd = document.getElementById('rel-tbody-prod');
+  if(tbProd){
+    if(!produtos.length){
+      tbProd.innerHTML = '<tr><td colspan="3" style="color:var(--muted)">Nenhum produto vendido neste dia.</td></tr>';
+    }else{
+      tbProd.innerHTML = produtos.map(function(p){
+        return '<tr>'
+          +'<td>'+esc(p.nome)+'</td>'
+          +'<td>'+p.qtd+'</td>'
+          +'<td>'+fmt(p.valor)+'</td>'
+          +'</tr>';
+      }).join('');
+    }
   }
 
-  // separador
-  rows.push('<tr><td colspan="5" style="height:10px;background:transparent;border-bottom:none"></td></tr>');
-
-  // header pagamentos
-  rows.push('<tr><td colspan="5" style="font-weight:800">Pagamentos recebidos no dia</td></tr>');
-  if(!pagamentos.length){
-    rows.push('<tr><td colspan="5" style="color:var(--muted)">Nenhum pagamento recebido neste dia.</td></tr>');
-  }else{
-    pagamentos.forEach(function(p){
-      rows.push('<tr>'
-        +'<td><span class="badge '+(p.tipo==='Fiado pago'?'badge-warn':'badge-ok')+'">'+esc(p.tipo)+'</span></td>'
-        +'<td>'+esc(p.desc)+'</td>'
-        +'<td>'+ (p.qtd||'—') +'</td>'
-        +'<td>'+fmt(p.valor)+'</td>'
-        +'<td style="color:var(--muted)">'+esc(p.obs||'')+'</td>'
-        +'</tr>');
-    });
+  // preencher pagamentos
+  var tbPay = document.getElementById('rel-tbody-pay');
+  if(tbPay){
+    if(!pagamentos.length){
+      tbPay.innerHTML = '<tr><td colspan="4" style="color:var(--muted)">Nenhum pagamento recebido neste dia.</td></tr>';
+    }else{
+      tbPay.innerHTML = pagamentos.map(function(p){
+        return '<tr>'
+          +'<td><span class="badge '+(p.tipo==='Fiado pago'?'badge-warn':'badge-ok')+'">'+esc(p.tipo)+'</span></td>'
+          +'<td>'+esc(p.desc)+'</td>'
+          +'<td>'+fmt(p.valor)+'</td>'
+          +'<td style="color:var(--muted)">'+esc(p.obs||'')+'</td>'
+          +'</tr>';
+      }).join('');
+    }
   }
 
-  tbody.innerHTML = rows.join('');
+  // KPIs
+  var elTotal = document.getElementById('rel-total-pago-big');
+  var elPagosQtd = document.getElementById('rel-kpi-pagos-qtd');
+  var elVendas = document.getElementById('rel-kpi-vendas');
+  var elItens = document.getElementById('rel-kpi-itens');
+  var elData = document.getElementById('rel-kpi-data');
 
-  // resumos
-  var elV = document.getElementById('rel-resumo-vendas');
-  var elP = document.getElementById('rel-resumo-pagamentos');
-  if(elV) elV.textContent = vendasNoDia + ' (' + produtos.reduce(function(s,p){return s+p.qtd;},0) + ' itens)';
-  if(elP) elP.textContent = fmt(totalPag);
+  if(elTotal) elTotal.textContent = fmt(totalPag);
+  if(elPagosQtd) elPagosQtd.textContent = (pagamentos.length) + ' pagamentos';
+  if(elVendas) elVendas.textContent = String(vendasNoDia);
+  if(elItens) elItens.textContent = String(itensNoDia) + ' itens';
+  if(elData) elData.textContent = refDate.toLocaleDateString('pt-BR');
 
 }
 
@@ -2293,6 +2481,10 @@ async function sbAutoPullTick(){
 
 function sbInit(){
   try{
+    if(!window.__SB){
+      window.__SB = { client:null,userId:null,email:null,saveTimer:null,lastLocalChangeAt:0,lastRemoteUpdatedAt:0,autoPullTimer:null };
+    }
+
     if(!SUPABASE_URL || SUPABASE_URL.indexOf('COLE_AQUI')>=0) { sbSetStatus('config pendente'); return; }
     if(!SUPABASE_ANON_KEY || SUPABASE_ANON_KEY.indexOf('COLE_AQUI')>=0) { sbSetStatus('config pendente'); return; }
 
@@ -2351,12 +2543,23 @@ sbStartAutoPull();
 
 async function sbLogin(){
   try{
-    if(!window.__SB.client){ sbInit();
+    if(!window.__SB){
+      window.__SB = { client:null,userId:null,email:null,saveTimer:null,lastLocalChangeAt:0,lastRemoteUpdatedAt:0,autoPullTimer:null };
+    }
+
+    if(!window.__SB.client){
+      sbInit();
+      // espera o SDK inicializar
+      for(var i=0;i<20 && !window.__SB.client;i++){
+        await new Promise(function(r){ setTimeout(r, 100); });
+      }
+    }
+    if(!window.__SB.client){ alert('SDK do Supabase não carregou ou config pendente.'); return; }
 // debug UI
 var __showDebug = (location.search||'').indexOf('debug=1')>=0;
 try{ var dbg=document.getElementById('sb-debug'); if(dbg) dbg.style.display = __showDebug ? 'block' : 'none'; }catch(e){}
 try{ var b=document.getElementById('btn-diagnostico'); if(b) b.style.display = (window.__SB && window.__SB.userId) ? 'inline-block' : 'none'; }catch(e){}
- }
+
     var email = (document.getElementById('sb-email')||{}).value || '';
     var pass = (document.getElementById('sb-pass')||{}).value || '';
     if(!email || !pass){ alert('Informe email e senha.'); return; }
@@ -2568,7 +2771,7 @@ setupTabelaProdutosListeners();
 <script>
   if ("serviceWorker" in navigator) {
     window.addEventListener("load", () => {
-      navigator.serviceWorker.register('./service-worker-v4.js');
+      navigator.serviceWorker.register('./service-worker-v5.js');
     });
   }
 </script>
