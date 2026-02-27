@@ -1867,11 +1867,12 @@ function sbInit(){
         window.__SB.userId = sess.user.id;
         window.__SB.email = sess.user.email || null;
         sbSetStatus(window.__SB.email || ('uid ' + window.__SB.userId.slice(0,6)));
-        sbSyncPull(false, true);
-        sbStartAutoPull();
-        // ao logar: puxar automaticamente
-        sbSyncPull(false, true).then(function(){ if(window.__SYNC_GUARD) window.__SYNC_GUARD.pulledAfterLogin = true; });
-        sbStartAutoPull();
+
+// ao iniciar com sessão existente: puxa 1x e libera push após concluir
+sbSyncPull(false, true).then(function(ok){
+  if(ok && window.__SYNC_GUARD) window.__SYNC_GUARD.pulledAfterLogin = true;
+});
+sbStartAutoPull();
       }else{
         sbSetStatus('desconectado');
         sbStopAutoPull();
@@ -1884,9 +1885,12 @@ function sbInit(){
         window.__SB.userId = session.user.id;
         window.__SB.email = session.user.email || null;
         sbSetStatus(window.__SB.email || ('uid ' + window.__SB.userId.slice(0,6)));
-        // ao logar: puxar automaticamente
-        sbSyncPull(false, true);
-        sbStartAutoPull();
+
+// ao logar: puxar automaticamente e liberar push após concluir
+sbSyncPull(false, true).then(function(ok){
+  if(ok && window.__SYNC_GUARD) window.__SYNC_GUARD.pulledAfterLogin = true;
+});
+sbStartAutoPull();
       }else{
         window.__SB.userId = null;
         window.__SB.email = null;
@@ -1981,15 +1985,32 @@ async function sbSyncPull(showAlerts=true, silent=false){
         return false;
       }
     }
-    // Conflito: se o local é mais recente que o online, não sobrescreve automaticamente
-    var localTs = 0;
-    try{ localTs = db && db._updatedAt ? Date.parse(db._updatedAt) : 0; }catch(e){}
-    if(localTs && remoteUpdated && localTs > remoteUpdated){
-      if(showAlerts){
-        if(!confirm('Seu banco local parece mais recente que o online. Deseja substituir o local pelo online mesmo assim?')){
-          return false;
-        }
-      }else{
+    
+// Conflito: se o local é mais recente que o online, não sobrescreve automaticamente
+// Observação: relógio do dispositivo pode estar adiantado. Tolerância: 10 minutos.
+var localTs = 0;
+try{ localTs = db && db._updatedAt ? Date.parse(db._updatedAt) : 0; }catch(e){}
+var localEmpty = true;
+try{
+  localEmpty = (!db || !Array.isArray(db.produtos) || db.produtos.length===0) &&
+               (!db || !Array.isArray(db.vendas) || db.vendas.length===0) &&
+               (!db || !Array.isArray(db.movimentacoes) || db.movimentacoes.length===0);
+}catch(e){ localEmpty = true; }
+
+var skew = (localTs && remoteUpdated) ? (localTs - remoteUpdated) : 0;
+var allowSkew = 10 * 60 * 1000; // 10 min
+
+if(localTs && remoteUpdated && localTs > remoteUpdated && !localEmpty && skew > allowSkew){
+  if(showAlerts){
+    if(!confirm('Seu banco local parece mais recente que o online. Deseja substituir o local pelo online mesmo assim?')){
+      return false;
+    }
+  }else{
+    // modo automático: preserva o local (evita perda)
+    return false;
+  }
+}
+}else{
         // modo automático: preserva o local
         return false;
       }
@@ -2031,7 +2052,30 @@ async function sbSyncPush(showAlerts=true){
       return false;
     }
 
-    var payload = {
+    
+// REMOTE MORE NEW GUARD: evita sobrescrever o online com dados locais desatualizados
+try{
+  var chk = await window.__SB.client
+    .from('revenda_db')
+    .select('updated_at')
+    .eq('user_id', window.__SB.userId)
+    .maybeSingle();
+  if(chk && chk.data && chk.data.updated_at){
+    var remoteTs = Date.parse(chk.data.updated_at) || 0;
+    var localTs2 = 0;
+    try{ localTs2 = db && db._updatedAt ? Date.parse(db._updatedAt) : 0; }catch(e){}
+    if(remoteTs && localTs2 && remoteTs > localTs2){
+      if(showAlerts){
+        alert('O online está mais recente que este dispositivo. Faça "Puxar do online" antes de enviar para evitar perder dados.');
+      }
+      return false;
+    }
+  }
+}catch(e){
+  // se falhar a checagem, continua (melhor não bloquear por erro de rede)
+}
+
+var payload = {
       user_id: window.__SB.userId,
       db: db,
       updated_at: (db && db._updatedAt) ? db._updatedAt : new Date().toISOString()
@@ -2080,7 +2124,7 @@ setupTabelaProdutosListeners();
 <script>
   if ("serviceWorker" in navigator) {
     window.addEventListener("load", () => {
-      navigator.serviceWorker.register("./service-worker.js");
+      navigator.serviceWorker.register('./service-worker-v3.js');
     });
   }
 </script>
