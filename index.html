@@ -853,6 +853,20 @@ label{
 #page-dados{ display:none !important; }
 #page-dados.active{ display:block !important; }
 
+
+/* ─── ALINHAMENTO NO TOPO: Importar / Exportar ───────────────────────── */
+body[data-page="dados"] .main{
+  justify-content: flex-start !important;
+  align-items: flex-start !important;
+}
+body[data-page="dados"] #page-dados{
+  padding-top: 12px !important;
+  margin-top: 0 !important;
+}
+body[data-page="dados"] #page-dados .dados-shell{
+  margin-top: 0 !important;
+}
+
 </style>
 <link rel="manifest" href="./manifest.json">
 <meta name="theme-color" content="#0b0b0c">
@@ -1436,41 +1450,39 @@ function preencherDatalistCategorias(){
 }
 
 function goTo(pg){
+  try{ document.body.setAttribute('data-page', pg); }catch(e){}
+
   document.querySelectorAll('.page').forEach(function(el){el.classList.remove('active');});
   document.querySelectorAll('.nav-item').forEach(function(el){el.classList.remove('active');});
   document.getElementById('page-'+pg).classList.add('active');
   var nav = document.getElementById('nav-'+pg);
   if(nav) nav.classList.add('active');
 
-
-  
-
-  // volta o scroll para o topo ao trocar de aba (documento e container)
+  // garante que a aba abre no topo (corrige rolagem preservada)
   (function(){
-    try{
-      var se = document.scrollingElement || document.documentElement;
-      if(se) se.scrollTop = 0;
-      document.documentElement.scrollTop = 0;
-      document.body.scrollTop = 0;
-      window.scrollTo(0,0);
-    }catch(e){}
-    try{
-      var main = document.querySelector('.main');
-      if(main) main.scrollTop = 0;
-    }catch(e){}
-    // reforço depois que o DOM aplicar a troca de .active
-    setTimeout(function(){
-      try{
-        var se = document.scrollingElement || document.documentElement;
-        if(se) se.scrollTop = 0;
-        window.scrollTo(0,0);
-      }catch(e){}
+    function resetScroll(){
       try{
         var main = document.querySelector('.main');
         if(main) main.scrollTop = 0;
       }catch(e){}
-    }, 0);
+      try{
+        var se = document.scrollingElement || document.documentElement;
+        if(se) se.scrollTop = 0;
+        document.documentElement.scrollTop = 0;
+        document.body.scrollTop = 0;
+        window.scrollTo(0,0);
+      }catch(e){}
+      try{
+        var page = document.getElementById('page-'+pg);
+        if(page) page.scrollIntoView({block:'start'});
+      }catch(e){}
+    }
+    resetScroll();
+    // reforço depois que o DOM aplicar estilos e o browser calcular layout
+    setTimeout(resetScroll, 0);
+    requestAnimationFrame(resetScroll);
   })();
+
 var fns = {dashboard:renderDashboard,produtos:renderProdutos,vendas:function(){if(document.getElementById('venda-data')) document.getElementById('venda-data').value=(new Date()).toISOString().slice(0,10);
   renderProdutosVenda();renderCarrinho();},fiado:renderFiado,historico:renderHistorico,relatorios:renderRelatorios,dados:renderDados};
   if(fns[pg]) fns[pg]();
