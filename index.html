@@ -1861,6 +1861,173 @@ document.addEventListener("DOMContentLoaded", function(){
 }
 </style>
 
+
+<style>
+/* ─────────────────────────────────────────────
+   Badge Estoque Baixo — Alto Contraste
+──────────────────────────────────────────── */
+
+.prod-badge{
+  position:absolute;
+  top:14px;
+  left:14px;
+  z-index:5;
+
+  padding:6px 12px;
+  border-radius:999px;
+
+  font-size:12px;
+  font-weight:800;
+  letter-spacing:.3px;
+
+  background: rgba(220,38,38,.92);
+  color:#ffffff;
+
+  box-shadow:
+    0 8px 18px rgba(0,0,0,.35),
+    0 0 0 2px rgba(255,255,255,.35);
+
+  backdrop-filter: blur(4px);
+}
+
+body:not(.dark) .prod-badge{
+  background: rgba(239,68,68,.95);
+  color:#ffffff;
+}
+</style>
+
+
+<style>
+/* ─────────────────────────────────────────────
+   Em espera — estado selecionado (retorno visual)
+──────────────────────────────────────────── */
+.pgto-opt.sel-espera{
+  border-color: rgba(245,158,11,.85) !important;
+  background: rgba(245,158,11,.25) !important;
+  box-shadow:
+    0 14px 30px rgba(245,158,11,.25),
+    inset 0 1px 0 rgba(255,255,255,.75) !important;
+  transform: translateY(-2px);
+}
+</style>
+
+
+<style>
+/* ─────────────────────────────────────────────
+   Em espera — estado selecionado FORTE
+──────────────────────────────────────────── */
+.pgto-opt.sel-espera{
+  background: linear-gradient(135deg, #f59e0b, #d97706) !important;
+  color: #ffffff !important;
+  border-color: #d97706 !important;
+  box-shadow:
+    0 18px 40px rgba(217,119,6,.45),
+    0 0 0 3px rgba(245,158,11,.35) !important;
+  transform: translateY(-3px) scale(1.02);
+}
+
+.pgto-opt.sel-espera span{
+  color: #ffffff !important;
+}
+</style>
+
+
+<style>
+/* ─────────────────────────────────────────────
+   RELATÓRIOS — Top 3 com fonte maior
+──────────────────────────────────────────── */
+
+#page-relatorios .rel-kpi-card .kpi-label{
+  font-size: 14px !important;
+  font-weight: 800 !important;
+  letter-spacing: .6px !important;
+}
+
+#page-relatorios .rel-kpi-card .kpi-rank-name{
+  font-size: 18px !important;
+  font-weight: 800 !important;
+}
+
+#page-relatorios .rel-kpi-card .kpi-rank-val{
+  font-size: 16px !important;
+  font-weight: 700 !important;
+}
+
+#page-relatorios .rel-kpi-card .kpi-medal{
+  font-size: 20px !important;
+}
+
+#page-relatorios .rel-kpi-card .kpi-rank{
+  padding: 14px 16px !important;
+}
+</style>
+
+
+<style>
+/* ─────────────────────────────────────────────
+   FIADO — Fonte maior e mais legível
+──────────────────────────────────────────── */
+
+#page-fiado .fiado-nome{
+  font-size: 20px !important;
+  font-weight: 800 !important;
+}
+
+#page-fiado .fiado-card{
+  padding: 20px 22px !important;
+}
+
+#page-fiado .fiado-card-header{
+  margin-bottom: 14px !important;
+}
+
+#page-fiado .fiado-card-header div{
+  font-size: 15px !important;
+}
+
+#page-fiado .fiado-compra-item{
+  font-size: 16px !important;
+  padding: 10px 0 !important;
+}
+
+#page-fiado .fiado-compra-item strong{
+  font-size: 16px !important;
+}
+
+#page-fiado .fiado-pago-info{
+  font-size: 14px !important;
+}
+</style>
+
+
+<style>
+/* ─────────────────────────────────────────────
+   FIADO — Botão Marcar tudo pago
+──────────────────────────────────────────── */
+#page-fiado .btn-ok{
+  white-space: nowrap;
+}
+</style>
+
+
+<style>
+/* ─────────────────────────────────────────────
+   FIADO — Total devido com maior destaque
+──────────────────────────────────────────── */
+
+#page-fiado .fiado-total-devendo{
+  font-size: 28px !important;
+  font-weight: 900 !important;
+  letter-spacing: .5px;
+}
+
+/* fallback caso esteja inline */
+#page-fiado div[style*="color:var(--danger)"]{
+  font-size: 28px !important;
+  font-weight: 900 !important;
+}
+</style>
+
 </head>
 <body>
 
@@ -2998,11 +3165,21 @@ function renderProdutos(){
 
 // ─── VENDAS / CARRINHO ────────────────────────────────────────────────────────
 function selPgto(tipo){
-  document.getElementById('venda-pgto').value=tipo;
-  document.getElementById('opt-pago').className='pgto-opt'+(tipo==='pago'?' sel-pago':'');
-  document.getElementById('opt-fiado').className='pgto-opt'+(tipo==='fiado'?' sel-fiado':'');
-  var opE = document.getElementById('opt-espera');
-  if(opE) opE.className='pgto-opt'+(tipo==='espera'?' sel-espera':'');
+  document.getElementById('venda-pgto').value = tipo;
+
+  var pago   = document.getElementById('opt-pago');
+  var fiado  = document.getElementById('opt-fiado');
+  var espera = document.getElementById('opt-espera');
+
+  // reset
+  if(pago)   pago.className   = 'pgto-opt';
+  if(fiado)  fiado.className  = 'pgto-opt';
+  if(espera) espera.className = 'pgto-opt em-espera';
+
+  // aplica seleção
+  if(tipo === 'pago'   && pago)   pago.classList.add('sel-pago');
+  if(tipo === 'fiado'  && fiado)  fiado.classList.add('sel-fiado');
+  if(tipo === 'espera' && espera) espera.classList.add('sel-espera');
 }
 
 
@@ -3320,6 +3497,9 @@ function renderFiado(){
     var vendas=porCliente[nome];
     var totalDev=vendas.filter(function(v){return!v.fiadoPago;}).reduce(function(s,v){return s+v.total;},0);
     var totalQuit=vendas.filter(function(v){return v.fiadoPago;}).reduce(function(s,v){return s+v.total;},0);
+    var pendentes=vendas.filter(function(v){return !v.fiadoPago;}).length;
+    var encNome=encodeURIComponent(nome);
+
     var comprasHTML='';
     vendas.forEach(function(v){
       var itensStr=v.itens.map(function(i){return esc(i.nome)+' ×'+i.qtd;}).join(', ');
@@ -3339,12 +3519,43 @@ function renderFiado(){
       +'<div><div class="fiado-nome">👤 '+esc(nome)+'</div>'
       +'<div style="font-size:12px;color:var(--muted);margin-top:3px">'+vendas.length+' compra(s) no fiado</div></div>'
       +(fiadoTab==='devendo'
-        ?'<div style="font-size:20px;font-weight:700;color:var(--danger)">'+fmt(totalDev)+'</div>'
+        ?'<div style="display:flex;flex-direction:column;align-items:flex-end;gap:8px">'+'<div style="font-size:20px;font-weight:700;color:var(--danger)">'+fmt(totalDev)+'</div>'+(pendentes>1?'<button class="btn-ok" onclick="pagarFiadoTudoEnc(\''+encNome+'\')">Marcar tudo pago</button>':'')+'</div>'
         :'<div style="font-size:16px;font-weight:700;color:var(--success)">'+fmt(totalQuit)+' quitado</div>')
       +'</div><div>'+comprasHTML+'</div></div>';
   });
   div.innerHTML=html;
 }
+
+function pagarFiadoTudoEnc(encNome){
+  var nome = decodeURIComponent(encNome||'');
+  if(!nome) return;
+
+  // seleciona apenas pendências
+  var pend = db.vendas.filter(function(v){
+    return v.pgto==='fiado' && v.cliente===nome && !v.fiadoPago;
+  });
+
+  if(!pend.length) return;
+
+  var total = pend.reduce(function(s,v){ return s + (v.total||0); }, 0);
+
+  if(!confirm('Marcar como PAGO todas as compras de '+nome+'?\n\nItens pendentes: '+pend.length+'\nTotal: '+fmt(total))){
+    return;
+  }
+
+  var agora = new Date().toISOString();
+  pend.forEach(function(v){
+    v.fiadoPago = true;
+    v.fiadoPagoData = agora;
+    v.fiadoPagoObs = 'Pagamento em lote';
+  });
+
+  save();
+  atualizarBadgeFiado();
+  renderFiado();
+  renderHistorico();
+}
+
 function abrirPagarFiado(vendaId){
   var v=db.vendas.find(function(v){return v.id==vendaId;});if(!v)return;
   var idx=db.vendas.indexOf(v);
