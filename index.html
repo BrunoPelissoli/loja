@@ -3237,7 +3237,15 @@ function selPgto(tipo){
 function renderProdutosVenda(){
   var busca=(document.getElementById('busca-venda')?document.getElementById('busca-venda').value:'').toLowerCase();
   var lista=db.produtos.filter(function(p){return p && !p.excluido && p.estoque>0 && p.nome.toLowerCase().indexOf(busca)>=0;});
-  var div=document.getElementById('grade-produtos-venda');
+  
+  // ordena por estoque (maior → menor), desempate por nome
+  lista.sort(function(a,b){
+    var ea = Number(a.estoque||0);
+    var eb = Number(b.estoque||0);
+    if(eb !== ea) return eb - ea;
+    return String(a.nome||'').localeCompare(String(b.nome||''));
+  });
+var div=document.getElementById('grade-produtos-venda');
   if(!lista.length){div.innerHTML='<p style="color:var(--muted);font-size:14px">Nenhum produto disponível em estoque.</p>';return;}
 
   div.innerHTML=lista.map(function(p){
@@ -3544,7 +3552,21 @@ function renderFiado(){
   var porCliente={};
   filtradas.forEach(function(v){if(!porCliente[v.cliente])porCliente[v.cliente]=[];porCliente[v.cliente].push(v);});
   var html='';
-  Object.keys(porCliente).forEach(function(nome){
+  var __ord = Object.keys(porCliente);
+  var __tot = {};
+  __ord.forEach(function(n){
+    var vs = porCliente[n]||[];
+    var dev = vs.filter(function(v){return !v.fiadoPago;}).reduce(function(s,v){return s+(v.total||0);},0);
+    var quit = vs.filter(function(v){return v.fiadoPago;}).reduce(function(s,v){return s+(v.total||0);},0);
+    __tot[n] = {dev:dev, quit:quit};
+  });
+  __ord.sort(function(a,b){
+    var va = (fiadoTab==='devendo'?(__tot[a].dev||0):(__tot[a].quit||0));
+    var vb = (fiadoTab==='devendo'?(__tot[b].dev||0):(__tot[b].quit||0));
+    if(vb!==va) return vb-va;
+    return String(a||'').localeCompare(String(b||''));
+  });
+  __ord.forEach(function(nome){
     var vendas=porCliente[nome];
     var totalDev=vendas.filter(function(v){return!v.fiadoPago;}).reduce(function(s,v){return s+v.total;},0);
     var totalQuit=vendas.filter(function(v){return v.fiadoPago;}).reduce(function(s,v){return s+v.total;},0);
